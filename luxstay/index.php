@@ -1,4 +1,4 @@
-<!-- fushat e regjistrimit jane vetem: name, email, phone num, date od birth, password-->
+<!-- fushat e regjistrimit jane vetem: name, email, phone num, date of birth, password-->
 <!-- stilizimet: bootstrap, swiper.js-->
 
 <!DOCTYPE html>
@@ -35,6 +35,22 @@
         .custom-bg:hover{
             background-color: #279e8c;
         }
+
+        .swiper,
+        .swiper-wrapper,
+        .swiper-slide {
+            pointer-events: auto;
+        }
+
+        .swiper-slide {
+            cursor: grab;
+        }
+        .swiper-slide img {
+            width: 100%;         
+            height: 400px;        
+            object-fit: cover;     
+        }
+
         </style>
 </head>
 <body>
@@ -107,7 +123,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Understood</button>
+                        <button type="button" class="btn btn-primary">Login</button>
                     </div>
                 </form>
             </div>
@@ -132,18 +148,21 @@
                                 <div class="col-md-6 ps-0 mb-3">
                                     <label class="form-label">Name</label>
                                     <input type="text" class="form-control shadow-none">
+                                    <br>
                                     <label class="form-label">Email</label>
                                     <input type="email" class="form-control shadow-none">
                                 </div>
                                 <div class="col-md-6 ps-0 mb-3">
                                     <label class="form-label">Phone Number</label>
                                     <input type="number" class="form-control shadow-none">
+                                    <br>
                                     <label class="form-label">Date of Birth</label>
                                     <input type="date" class="form-control shadow-none">
                                 </div>
                                 <div class="col-md-6 ps-0 mb-3">
                                     <label class="form-label">Password</label>
                                     <input type="password" class="form-control shadow-none">
+                                    <br>
                                     <label class="form-label">Confirm Password</label>
                                     <input type="password" class="form-control shadow-none">
                                 </div>
@@ -194,7 +213,7 @@
                         <input type="date" class="form-control shadow-none">
                     </div>
                     <div class="col-lg-3">
-                        <label class="form-label" style="font-weight: 500;">Check-on</label>
+                        <label class="form-label" style="font-weight: 500;">Check-out</label>
                         <input type="date" class="form-control shadow-none">
                     </div>
                     <div class="col-lg-3">
@@ -331,7 +350,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12 text-centre mt-5">
+            <div class="col-lg-12 text-end mt-5">
             <a href="#" class="btn btn-outline-dark rounded-0 fw-bold shadow-none">More Rooms >>></a>
             </div>
         </div>
@@ -365,64 +384,63 @@
     <div class="container mt-5">
         <div class="swiper swiper-ratings">
             <div class="swiper-wrapper">
-                   <div class="swiper-slide bg-white p-4">
-                <h6>Random user</h6>
-                <p>Lorem ipsum dolor sit amet, 
-                    consectetur adipiscing elit, 
-                    sed do eiusmod tempor incididunt ut 
-                    labore et dolore magna aliqua. Ut 
-                    enim ad minim veniam, quis nostrud 
-                    exercitation ullamco laboris nisi 
-                    ut aliquip ex ea commodo consequat. </p>
-                <div class="rating mb-4">
-                            <h6 class="mb-1">Rating</h6>
-                            <span class="badge rounded-pill bg-light">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                            </span>
+                <div class="swiper-slide bg-white p-4">
+                    <h6>Random user</h6>
+                    <p>Lorem ipsum dolor sit amet, 
+                        consectetur adipiscing elit, 
+                        sed do eiusmod tempor incididunt ut 
+                        labore et dolore magna aliqua. Ut 
+                        enim ad minim veniam, quis nostrud 
+                        exercitation ullamco laboris nisi 
+                        ut aliquip ex ea commodo consequat. </p>
+                    <div class="rating mb-4">
+                                <h6 class="mb-1">Rating</h6>
+                                <span class="badge rounded-pill bg-light">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                </span>
+                    </div>
                 </div>
-            </div>
-                            <div class="swiper-slide bg-white p-4">
-                <h6>Random user</h6>
-                <p>Lorem ipsum dolor sit amet, 
-                    consectetur adipiscing elit, 
-                    sed do eiusmod tempor incididunt ut 
-                    labore et dolore magna aliqua. Ut 
-                    enim ad minim veniam, quis nostrud 
-                    exercitation ullamco laboris nisi 
-                    ut aliquip ex ea commodo consequat. </p>
-                <div class="rating mb-4">
-                            <h6 class="mb-1">Rating</h6>
-                            <span class="badge rounded-pill bg-light">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                            </span>
+                <div class="swiper-slide bg-white p-4">
+                    <h6>Random user</h6>
+                    <p>Lorem ipsum dolor sit amet, 
+                        consectetur adipiscing elit, 
+                        sed do eiusmod tempor incididunt ut 
+                        labore et dolore magna aliqua. Ut 
+                        enim ad minim veniam, quis nostrud 
+                        exercitation ullamco laboris nisi 
+                        ut aliquip ex ea commodo consequat. </p>
+                    <div class="rating mb-4">
+                                <h6 class="mb-1">Rating</h6>
+                                <span class="badge rounded-pill bg-light">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                </span>
+                    </div>
                 </div>
-            </div>
-                   <div class="swiper-slide bg-white p-4">
-                <h6>Random user</h6>
-                <p>Lorem ipsum dolor sit amet, 
-                    consectetur adipiscing elit, 
-                    sed do eiusmod tempor incididunt ut 
-                    labore et dolore magna aliqua. Ut 
-                    enim ad minim veniam, quis nostrud 
-                    exercitation ullamco laboris nisi 
-                    ut aliquip ex ea commodo consequat. </p>
-                <div class="rating mb-4">
-                            <h6 class="mb-1">Rating</h6>
-                            <span class="badge rounded-pill bg-light">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                            </span>
+                <div class="swiper-slide bg-white p-4">
+                    <h6>Random user</h6>
+                    <p>Lorem ipsum dolor sit amet, 
+                        consectetur adipiscing elit, 
+                        sed do eiusmod tempor incididunt ut 
+                        labore et dolore magna aliqua. Ut 
+                        enim ad minim veniam, quis nostrud 
+                        exercitation ullamco laboris nisi 
+                        ut aliquip ex ea commodo consequat. </p>
+                    <div class="rating mb-4">
+                                <h6 class="mb-1">Rating</h6>
+                                <span class="badge rounded-pill bg-light">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                </span>
+                    </div>
                 </div>
-            </div>
-            </div>
             </div>
             <div class="swiper-pagination"></div>
         </div>
@@ -439,7 +457,7 @@
                 <div class="bg-white">
                     <h5>Call Us!</h5>
                     <a href="tel: +355699817747" class="d-inline-block mb-2 text-decoration-none text-dark"><i class="bi bi-telephone-fill"></i>+355699817747</a>
-                    <br>
+                    <br><br>
                     <h5>Follow Us!</h5>
                     <a href="#" class="d-inline-block mb-3">
                         <span class="badge bg-light text-dark fs-6 p-2"><i class="bi bi-twitter me-1"></i>Twitter
@@ -495,44 +513,55 @@
         var swiper = new Swiper(".swiper-container", {
         spaceBetween: 30,
         effect: "fade",
-        lopp: true, 
+        loop: true, 
         autoplay: {
             delay: 3500, 
             disableOnInteraction: false,
         }
         });
    
-     var swiper = new Swiper(".swiper-ratings", {
-      effect: "coverflow",
-      grabCursor: true,
-      centeredSlides: true,
-      slidesPerView: "auto",
-      slidesPerView: "3",
-      loop: true,
-      coverflowEffect: {
-        rotate: 50,
-        stretch: 0,
-        depth: 100,
-        modifier: 1,
-        slideShadows: false,
-      },
-      pagination: {
-        el: ".swiper-pagination",
-      },
-      breakpoints:{
-        320:{
-            slidesPerView: 1,
+        var swiper = new Swiper(".swiper-ratings", {
+        effect: "coverflow",
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: 3,
+        loop: true,
+
+        coverflowEffect: {
+            rotate: 50,
+            stretch: 0,
+            depth: 100,
+            modifier: 1,
+            slideShadows: false,
         },
-        640:{
-            slidesPerView: 1,
+
+        autoplay: {
+            delay: 3500,
+            disableOnInteraction: false,
         },
-        768:{
-            slidesPerView: 2,
+
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
         },
-        1024:{
-            slidesPerView: 3,
+
+        breakpoints: {
+            320: {
+                slidesPerView: 1,
+            },
+            640: {
+                slidesPerView: 1,
+            },
+            768: {
+                slidesPerView: 2,
+            },
+            1024: {
+                slidesPerView: 3,
+            },
         },
-      }});
+        });
+
+
     </script>
 </body>
 </html>
