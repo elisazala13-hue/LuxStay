@@ -15,7 +15,7 @@
       }
     </style>
 </head>
-<body>
+<body class ="bg-Light">
 
 <?php require __DIR__ . '/luxstay/inc/header.php'; ?>
 
