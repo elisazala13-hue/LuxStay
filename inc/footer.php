@@ -3,11 +3,12 @@
         <div class="row">
             <div class="col-lg-4 p-4">
                 <h3 class="h-font fw-bold fs-3 mb-2">LuxStay Hotel</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipiscing elit. 
-                    Quisque faucibus ex sapien vitae pellentesque sem placerat. 
-                    In id cursus mi pretium tellus duis convallis. Tempus 
-                    leo eu aenean sed diam urna tempor. Pulvinar vivamus 
-                    fringilla lacus nec metus bibendum egestas. </p>
+                <p>Hoteli ynë është krijuar për të përmbushur 
+                    nevojat e udhëtarëve modernë, qoftë për pushime,
+                     udhëtime biznesi apo qëndrime afatshkurtra. 
+                     Me dhoma të dizajnuara me kujdes, shërbim të personalizuar
+                      dhe vëmendje ndaj çdo detaji, ne synojmë t’ju bëjmë të 
+                      ndiheni si në shtëpinë tuaj – por me një prekje luksi.</p>
             </div>
             <div class="col-lg-4 p-4">
                 <h5 class="mb-3">Links</h5>
