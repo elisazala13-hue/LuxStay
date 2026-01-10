@@ -8,14 +8,9 @@
     <title>TJ Hotel - ABOUT</title>
 
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css">
+    <link rel="stylesheet" href="css/common.css">
 
     <?php require('inc/links.php'); ?>
-    <style>
-      .box{
-        border-top-color:var(--teal);
-      }
-    </style>
-
 </head>
 
 <body class="bg-light">
@@ -24,25 +19,26 @@
 
 <div class="my-5 px-4">
     <h2 class="fw-bold h-font text-center">ABOUT US</h2>
-    <div class="h-line bg-dark"></div>
+    <div class="h-line bg-dark mx-auto"></div>
 
     <p class="text-center mt-3">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        Temporibus incidunt odio quos <br>
-        dolore commodi repudiandae
-        tenetur consequuntur et similique asperiores.
+       Në LuxStay, ne besojmë se qëndrimi juaj duhet të jetë<br>
+       më shumë sesa thjesht një natë fjetjeje, duhet të jetë 
+       një përvojë e paharrueshme. <br>
+       I ndërtuar mbi standarde të larta komoditeti, elegance dhe mikpritjeje, 
+       LuxStay ofron një ambient ku luksi dhe rehati <br> 
+       takohen në harmoni të plotë.
     </p>
 </div>
 
 <div class="container">
     <div class="row justify-content-between align-items-center">
         <div class="col-lg-6 col-md-5 mb-4 order-lg-1 order-md-1 order-2">
-        <h3 class="mb-3">lorem ipsium dolor sit </h3>
-        <p>
-           Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        Temporibus incidunt odio quos
-        dolore commodi repudiandae
-        tenetur consequuntur et similique asperiores.
+        <h3 class="mb-3">Ekipi ynë</h3>
+        <p>Ekipi ynë profesional dhe mikpritës është 
+            gjithmonë i gatshëm t’ju ofrojë shërbimin më të mirë, 
+            duke siguruar që çdo moment i qëndrimit tuaj në LuxStay 
+            të jetë i rehatshëm, i qetë dhe i veçantë.
       </p>
     </div>
     <div class="col-lg-5 col-md-5 mb-4 order-lg-2 order-md-2 order-1">
@@ -92,17 +88,22 @@
 
       <div class="swiper-slide bg-white text-center overflow-hidden rounded">
         <img src="images/about/team.jpg" class="w-100" alt="Team member">
-        <h5 class="mt-2">Random Name</h5>
+        <h5 class="mt-2">Blerina Tafaj</h5>
+      </div>
+
+       <div class="swiper-slide bg-white text-center overflow-hidden rounded">
+        <img src="images/about/team.jpg" class="w-100" alt="Team member">
+        <h5 class="mt-2">Elisa Zala</h5>
       </div>
 
       <div class="swiper-slide bg-white text-center overflow-hidden rounded">
         <img src="images/about/team.jpg" class="w-100" alt="Team member">
-        <h5 class="mt-2">Random Name 2</h5>
+        <h5 class="mt-2">Xhesilda Coro</h5>
       </div>
 
       <div class="swiper-slide bg-white text-center overflow-hidden rounded">
         <img src="images/about/team.jpg" class="w-100" alt="Team member">
-        <h5 class="mt-2">Random Name 3</h5>
+        <h5 class="mt-2">Xhoana Pepa</h5>
       </div>
 
     </div>

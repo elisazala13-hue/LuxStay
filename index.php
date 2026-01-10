@@ -7,33 +7,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LuxStay Hotel - HOME</title>
+    <link rel="stylesheet" href="css/common.css">
     
     <?php require('inc/links.php'); ?>
     <style>
-        *{
-            font-family: "Poppins", sans-serif;
-        }
-        .h-font{
-            font-family: "Merienda", cursive;
-        }
-
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button{
-            -webkit-apperance: none;
-            margin: 0;
-        }
-        input[type=number]{
-            -moz-apperance: textfield;
-        }
-
-        .custom-bg{
-            background-color: #2ec1ac;
-        }
-        
-        .custom-bg:hover{
-            background-color: #279e8c;
-        }
-
         .swiper,
         .swiper-wrapper,
         .swiper-slide {
@@ -48,7 +25,6 @@
             height: 400px;        
             object-fit: cover;     
         }
-
         </style>
 </head>
 <body>
@@ -140,13 +116,11 @@
                             <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">AC</span>
                             <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">Room heater</span>
                         </div>
-                         <div class="guests mb-4">
+                        <div class="guests mb-4">
                             <h6 class="mb-1">Guests</h6>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">5 Adults</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">4 Children</span>
-                            
+                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">2 Adults</span>
                         </div>
-                        <div class="Rating mb-4">
+                        <div class="rating mb-4">
                             <h6 class="mb-1">Rating</h6>
                             <span class="badge rounded-pill bg-light">
                                 <i class="bi bi-star-fill text-warning"></i>
@@ -156,8 +130,8 @@
                             </span>
                         </div>
                         <div class="d-flex justify-content-evenly mb-2">
-                            <a href="#" class="btn btn-sm text-white custom-bg shadow-none">Book Now</a>
-                            <a href="#" class="btn btn-sm btn-outline-dark shadow-none">More Details...</a>
+                            <a href="#" class="btn btn-sm btn-primary shadow-none mb-2 h-100">Book Now</a>
+                            <a href="#" class="btn btn-sm btn-outline-dark shadow-none h-100">More Details...</a>
                         </div>
                     </div>
                 </div>
@@ -183,9 +157,8 @@
                         </div>
                         <div class="guests mb-4">
                             <h6 class="mb-1">Guests</h6>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">5 Adults</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">4 Children</span>
-                            
+                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">3 Adults</span>
+                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">1 Child</span>
                         </div>
                         <div class="rating mb-4">
                             <h6 class="mb-1">Rating</h6>
@@ -197,8 +170,8 @@
                             </span>
                         </div>
                         <div class="d-flex justify-content-evenly mb-2">
-                            <a href="#" class="btn btn-sm text-white custom-bg shadow-none">Book Now</a>
-                            <a href="#" class="btn btn-sm btn-outline-dark shadow-none">More Details...</a>
+                            <a href="#" class="btn btn-sm btn-primary shadow-none mb-2 h-100">Book Now</a>
+                            <a href="#" class="btn btn-sm btn-outline-dark shadow-none h-100">More Details...</a>
                         </div>
                     </div>
                 </div>
@@ -222,11 +195,10 @@
                             <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">Television</span>
                             <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">AC</span>
                         </div>
-                        <div class="guests mb-4">
+                         <div class="guests mb-4">
                             <h6 class="mb-1">Guests</h6>
                             <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">5 Adults</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">4 Children</span>
-                            
+                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">2 Children</span>
                         </div>
                         <div class="rating mb-4">
                             <h6 class="mb-1">Rating</h6>
@@ -239,8 +211,8 @@
                             </span>
                         </div>
                         <div class="d-flex justify-content-evenly mb-2">
-                            <a href="#" class="btn btn-sm text-white custom-bg shadow-none">Book Now</a>
-                            <a href="#" class="btn btn-sm btn-outline-dark shadow-none">More Details...</a>
+                            <a href="#" class="btn btn-sm btn-primary shadow-none mb-2 h-100">Book Now</a>
+                            <a href="#" class="btn btn-sm btn-outline-dark shadow-none h-100">More Details...</a>
                         </div>
                     </div>
                 </div>
@@ -280,17 +252,15 @@
         <div class="swiper swiper-ratings">
             <div class="swiper-wrapper">
                 <div class="swiper-slide bg-white p-4">
-                    <h6>Random user</h6>
-                    <p>Lorem ipsum dolor sit amet, 
-                        consectetur adipiscing elit, 
-                        sed do eiusmod tempor incididunt ut 
-                        labore et dolore magna aliqua. Ut 
-                        enim ad minim veniam, quis nostrud 
-                        exercitation ullamco laboris nisi 
-                        ut aliquip ex ea commodo consequat. </p>
+                    <h6>Alketa Qorri</h6>
+                    <p>Qëndrim shumë i këndshëm. Dhoma ishte 
+                        e pastër, e rregullt dhe shumë komode. 
+                        Vendndodhja perfekte për të lëvizur në qytet. 
+                        Do të kthehem përsëri. </p>
                     <div class="rating mb-4">
                                 <h6 class="mb-1">Rating</h6>
                                 <span class="badge rounded-pill bg-light">
+                                    <i class="bi bi-star-fill text-warning"></i>
                                     <i class="bi bi-star-fill text-warning"></i>
                                     <i class="bi bi-star-fill text-warning"></i>
                                     <i class="bi bi-star-fill text-warning"></i>
@@ -299,17 +269,15 @@
                     </div>
                 </div>
                 <div class="swiper-slide bg-white p-4">
-                    <h6>Random user</h6>
-                    <p>Lorem ipsum dolor sit amet, 
-                        consectetur adipiscing elit, 
-                        sed do eiusmod tempor incididunt ut 
-                        labore et dolore magna aliqua. Ut 
-                        enim ad minim veniam, quis nostrud 
-                        exercitation ullamco laboris nisi 
-                        ut aliquip ex ea commodo consequat. </p>
+                    <h6>Erald Balliu</h6>
+                    <p>Hotel i qetë dhe modern. Stafi 
+                        shumë i sjellshëm dhe gjithmonë 
+                        i gatshëm për ndihmë. Raport shumë 
+                        i mirë cilësi-çmim.</p>
                     <div class="rating mb-4">
                                 <h6 class="mb-1">Rating</h6>
                                 <span class="badge rounded-pill bg-light">
+                                    <i class="bi bi-star-fill text-warning"></i>
                                     <i class="bi bi-star-fill text-warning"></i>
                                     <i class="bi bi-star-fill text-warning"></i>
                                     <i class="bi bi-star-fill text-warning"></i>
@@ -318,17 +286,16 @@
                     </div>
                 </div>
                 <div class="swiper-slide bg-white p-4">
-                    <h6>Random user</h6>
-                    <p>Lorem ipsum dolor sit amet, 
-                        consectetur adipiscing elit, 
-                        sed do eiusmod tempor incididunt ut 
-                        labore et dolore magna aliqua. Ut 
-                        enim ad minim veniam, quis nostrud 
-                        exercitation ullamco laboris nisi 
-                        ut aliquip ex ea commodo consequat. </p>
+                    <h6>Alban Toska</h6>
+                    <p>Përvojë shumë pozitive. Ambient 
+                        i pastër, krevat i rehatshëm dhe 
+                        zonë shumë e mirë pranë kafeneve 
+                        dhe restoranteve. E rekomandoj pa 
+                        hezitim. </p>
                     <div class="rating mb-4">
                                 <h6 class="mb-1">Rating</h6>
                                 <span class="badge rounded-pill bg-light">
+                                    <i class="bi bi-star-fill text-warning"></i>
                                     <i class="bi bi-star-fill text-warning"></i>
                                     <i class="bi bi-star-fill text-warning"></i>
                                     <i class="bi bi-star-fill text-warning"></i>

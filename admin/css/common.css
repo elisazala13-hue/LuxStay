@@ -10,12 +10,14 @@
 .h-font{
     font-family:'Merienda',cursive;
 }
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+.box{
+        border-top-color:var(--teal);
+      }
 
 input[type=number] {
     -moz-appearance: textfield;
@@ -30,14 +32,8 @@ input[type=number] {
     background-color: var(--teal_hover);
     border-color: var(--teal_hover);
 }
-
 .h-line{
-    width: 150 px;
-    margin: 0 auto;
-    height:1.7px
-}
-.custom-alert{
-    position:fixed;
-    top: 25px;
-    right: 25px;
-}
+          width: 60px;
+          height: 3px;
+        }  
+
