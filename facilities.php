@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LuxStay Hotel - FACILITIES</title>
+    <link rel="stylesheet" href="css/common.css">
     
     <?php require('inc/links.php'); ?>
     <style>
@@ -23,12 +24,8 @@
 <?php require('inc/header.php'); ?>
 
 <div class="my-5 px-4">
-    <h2 class="fw-bold h-font text-centre"> OUR FACILITIES </h2>
-    
-    <div class="h-line bg-dark"></div>
-    <p class="text-centre mt-3">
-        Lorem ipsum 
-    </p>
+    <h2 class="fw-bold h-font text-center my-4"> OUR FACILITIES </h2>
+    <div class="h-line bg-dark mx-auto"></div>
 </div>
 
 <div class="container">
