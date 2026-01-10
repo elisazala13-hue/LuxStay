@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LuxStay Hotel - CONTACT</title>
 
-   <?php require __DIR__ . '/LuxStay/LuxStay/inc/links.php'; ?>
+   <?php require __DIR__ . '/inc/links.php'; ?>
 
 
   
 </head>
 <body class="bg-Light">
 
-<?php require __DIR__ . '/LuxStay/LuxStay/inc/header.php'; ?>
+<?php require __DIR__ . '/inc/header.php'; ?>
 
 <div class="my-5 px-4">
     <h2 class="fw-bold h-font text-center">CONTACT US</h2>
@@ -99,7 +99,7 @@
   </div>
 </div>
 
-<?php require __DIR__ . '/luxstay/inc/footer.php'; ?>
+<?php require __DIR__ . '/inc/footer.php'; ?>
 
 </body>
 <!DOCTYPE html>
@@ -115,7 +115,7 @@
 </head>
 <body class="bg-Light">
 
-<?php require __DIR__ . '/luxstay/inc/header.php'; ?>
+<?php require __DIR__ . '/inc/header.php'; ?>
 
 <div class="my-5 px-4">
     <h2 class="fw-bold h-font text-center">CONTACT US</h2>
@@ -202,7 +202,7 @@
   </div>
 </div>
 
-<?php require __DIR__ . '/luxstay/inc/footer.php'; ?>
+<?php require __DIR__ . '/inc/footer.php'; ?>
 
 </body>
 </html>
