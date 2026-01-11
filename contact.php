@@ -4,21 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LuxStay Hotel - CONTACT</title>
+    <link rel="stylesheet" href="css/common.css">
 
-    <?php require __DIR__ . '/luxstay/inc/links.php'; ?>
+<!--SHIKONI SI E KENI LINK E DIR-->
+    <?php require __DIR__ . '/inc/links.php'; ?>
 
   
 </head>
 <body class="bg-Light">
 
-<?php require __DIR__ . '/luxstay/inc/header.php'; ?>
+<?php require __DIR__ . '/inc/header.php'; ?>
 
-<div class="my-5 px-4">
+<div class="my-5 px-4 text-center">
     <h2 class="fw-bold h-font text-center">CONTACT US</h2>
-    <div class="h-line bg-dark"></div>
-    <p class="text-center mt-3">
-        Lorem ipsum 
-    </p>
+    <div class="h-line bg-dark mx-auto"></div>
 </div>
 
 <div class="container">
@@ -117,7 +116,7 @@
 
 ?>
 
-<?php require __DIR__ . '/luxstay/inc/footer.php'; ?>
+<?php require __DIR__ . '/inc/footer.php'; ?>
 
 </body>
 </html>
