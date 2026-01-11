@@ -1,6 +1,6 @@
 <?php
    require('inc/essentials.php');
-   require('inc/dc_config.php');
+   require('inc/db_config.php');
    adminLogin();
 
    if(isset($_GET['seen']))
@@ -70,9 +70,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compitable" content="IE-edge>
+    <meta http-equiv="X-UA-Compitable" content="IE-edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Admin Panel-UserQueries</title>
+     <title>Admin Panel- Contact</title>
      <?php require('inc/links.php');?>
 </head>
 <body class="bg-light">
@@ -80,7 +80,7 @@
    <div class="container-fluid" id="main-content">
       <div class="row">
          <div class="col-lg-10-ms-auto p-4 overflow-hidden">
-            <h3 class="mb-4">USER QUERIES</h3>
+            <h3 class="mb-4">CONTACT</h3>
 
             <div class="card border-0 shadow-sm mb-4">
                <div class="card-body">

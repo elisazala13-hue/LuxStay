@@ -72,17 +72,21 @@
                     <div class="col-lg-3">
                         <label class="form-label" style="font-weight: 500;">Adults</label>
                         <select class="form-select shadow-none">
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
                         </select>
                     </div>
                     <div class="col-lg-2">
                         <label class="form-label" style="font-weight: 500;">Children</label>
                         <select class="form-select shadow-none">
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                              <option value="1">1</option>
+                            <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
                         </select>
                     </div>
                     <div class="col-lg-1">
@@ -98,127 +102,83 @@
     <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">OUR ROOMS</h2>
     <div class="container">
         <div class="row">
-             <div class="col-lg-4 col-md-6 my-3">
-                <div class="card border-0 shadow" style="max-width: 350px; margin: auto;">
-                    <img src="images/rooms/1.png" class="card-img-top" >
-                    <div class="card-body">
-                        <h5>Deluxe Room</h5>
-                        <h6 class="mb-4">500€ per night</h6>
-                        <div class="features mb-4">
-                            <h6 class="mb-1">Features</h6>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">1 Bedroom</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">1 Bathroom</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">1 Balcony</span>
-                        </div>
-                        <div class="facilities mb-4">
-                            <h6 class="mb-1">Facilities</h6>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">Wifi</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">AC</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">Room heater</span>
-                        </div>
-                        <div class="guests mb-4">
-                            <h6 class="mb-1">Guests</h6>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">2 Adults</span>
-                        </div>
-                        <div class="rating mb-4">
-                            <h6 class="mb-1">Rating</h6>
-                            <span class="badge rounded-pill bg-light">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                            </span>
-                        </div>
-                        <div class="d-flex justify-content-evenly mb-2">
-                            <a href="#" class="btn btn-sm btn-primary shadow-none mb-2 h-100">Book Now</a>
-                            <a href="#" class="btn btn-sm btn-outline-dark shadow-none h-100">More Details...</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-              <div class="col-lg-4 col-md-6 my-3">
-                <div class="card border-0 shadow" style="max-width: 350px; margin: auto;">
-                    <img src="images/rooms/2.png" class="card-img-top" >
-                    <div class="card-body">
-                        <h5>Luxury Room</h5>
-                        <h6 class="mb-4">600€ per night</h6>
-                        <div class="features mb-4">
-                            <h6 class="mb-1">Features</h6>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">1 Bedroom</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">1 Bathroom</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">1 Balcony</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">2 Sofas</span>
-                        </div>
-                        <div class="facilities mb-4">
-                            <h6 class="mb-1">Facilities</h6>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">Wifi</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">AC</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">Room heater</span>
-                        </div>
-                        <div class="guests mb-4">
-                            <h6 class="mb-1">Guests</h6>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">3 Adults</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">1 Child</span>
-                        </div>
-                        <div class="rating mb-4">
-                            <h6 class="mb-1">Rating</h6>
-                            <span class="badge rounded-pill bg-light">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                            </span>
-                        </div>
-                        <div class="d-flex justify-content-evenly mb-2">
-                            <a href="#" class="btn btn-sm btn-primary shadow-none mb-2 h-100">Book Now</a>
-                            <a href="#" class="btn btn-sm btn-outline-dark shadow-none h-100">More Details...</a>
+         <?php
+        require('admin/inc/db_config.php');
+        require('admin/inc/essentials.php');
+
+        $room_res = select("SELECT * FROM `rooms` WHERE `status`=? AND `removed`=? LIMIT 3 ORDER BY `id` DESC",[1,0], 'ii');
+
+        while($room_data = mysqli_fetch_assoc($room_res)) {
+
+                // Features
+                $fea_q = mysqli_query($con,"SELECT f.name FROM `features` f
+                    INNER JOIN `room_features` rfea ON f.id = rfea.features_id
+                    WHERE rfea.room_id = '{$room_data['id']}'");
+
+                $features_data = "";
+                while($fea_row = mysqli_fetch_assoc($fea_q)){
+                    $features_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap'>{$fea_row['name']}</span> ";
+                }
+
+                // Facilities
+                $fac_q = mysqli_query($con,"SELECT f.name FROM `facilities` f
+                    INNER JOIN `room_facilities` rfac ON f.id = rfac.facilities_id
+                    WHERE rfac.room_id = '{$room_data['id']}'");
+
+                $facilities_data = "";
+                while($fac_row = mysqli_fetch_assoc($fac_q)){
+                    $facilities_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap'>{$fac_row['name']}</span> ";
+                }
+
+                // Image
+                $img_q = mysqli_query($con,"SELECT * FROM `room_images`
+                    WHERE `room_id`='{$room_data['id']}'
+                    ORDER BY `id` ASC
+                    LIMIT 1");
+
+                $room_thumb = ROOMS_IMG_PATH."default.jpg";
+                if(mysqli_num_rows($img_q) > 0){
+                    $img_res = mysqli_fetch_assoc($img_q);
+                    $room_thumb = ROOMS_IMG_PATH.$img_res['image'];
+                }
+
+                // HTML
+               echo <<<data
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 border-0 shadow">
+                        <div class="p-3">
+                            <img src="{$room_thumb}" class="img-fluid rounded mb-3">
+
+                            <h5 class="mb-2">{$room_data['name']}</h5>
+
+                            <div class="features mb-2">
+                                <h6 class="mb-1">Features</h6>
+                                {$features_data}
+                            </div>
+
+                            <div class="facilities mb-2">
+                                <h6 class="mb-1">Facilities</h6>
+                                {$facilities_data}
+                            </div>
+
+                            <div class="guests mb-3">
+                                <h6 class="mb-1">Guests</h6>
+                                <span class='badge rounded-pill bg-light text-dark'>{$room_data['adults']} Adults</span>
+                                <span class='badge rounded-pill bg-light text-dark'>{$room_data['children']} Children</span>
+                            </div>
+
+                            <h6 class="mb-3">{$room_data['price']}€ per night</h6>
+
+                            <a href="#" class="btn btn-sm btn-primary shadow-none w-100">Book Now</a>
                         </div>
                     </div>
                 </div>
-            </div>
-              <div class="col-lg-4 col-md-6 my-3">
-                <div class="card border-0 shadow" style="max-width: 350px; margin: auto;">
-                    <img src="images/rooms/3.png" class="card-img-top" >
-                    <div class="card-body">
-                        <h5>Supreme Deluxe Room</h5>
-                        <h6 class="mb-4">900€ per night</h6>
-                        <div class="features mb-4">
-                            <h6 class="mb-1">Features</h6>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">2 Bedrooms</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">1 Bathroom</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">1 Balcony</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">3 Sofas</span>
-                        </div>
-                        <div class="facilities mb-4">
-                            <h6 class="mb-1">Facilities</h6>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">Wifi</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">Television</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">AC</span>
-                        </div>
-                         <div class="guests mb-4">
-                            <h6 class="mb-1">Guests</h6>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">5 Adults</span>
-                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap">2 Children</span>
-                        </div>
-                        <div class="rating mb-4">
-                            <h6 class="mb-1">Rating</h6>
-                            <span class="badge rounded-pill bg-light">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                            </span>
-                        </div>
-                        <div class="d-flex justify-content-evenly mb-2">
-                            <a href="#" class="btn btn-sm btn-primary shadow-none mb-2 h-100">Book Now</a>
-                            <a href="#" class="btn btn-sm btn-outline-dark shadow-none h-100">More Details...</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                data;
+
+            }
+        ?>
             <div class="col-lg-12 text-end mt-5">
-            <a href="#" class="btn btn-outline-dark rounded-0 fw-bold shadow-none">More Rooms >>></a>
+            <a href="rooms.php" class="btn btn-outline-dark rounded-0 fw-bold shadow-none">More Rooms >>></a>
             </div>
         </div>
     </div>
@@ -341,8 +301,6 @@
         </div>
     </div>
 
-    <?php require('inc/footer.php'); ?>
-
     <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
     <script>
         var swiper = new Swiper(".swiper-container", {
@@ -398,5 +356,6 @@
 
 
     </script>
+<?php require('inc/footer.php'); ?>
 </body>
 </html>

@@ -31,11 +31,13 @@ input[type=number] {
     border-color: var(--teal_hover);
 }
 
-.h-line{
-    width: 150 px;
-    margin: 0 auto;
-    height:1.7px
+.h-line {
+    width: 100px;    
+    height: 2px;     
+    background-color: #000; 
+    margin: 8px auto 0 auto;  
 }
+
 .custom-alert{
     position:fixed;
     top: 25px;
