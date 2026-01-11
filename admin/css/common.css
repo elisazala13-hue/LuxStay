@@ -37,3 +37,25 @@ input[type=number] {
           height: 3px;
         }  
 
+.custom-alert{
+
+    position: fixed;
+    top: 80px;
+    right: 25px;
+}  
+
+::-webkit-scrollbar-track{
+    background: #2ec;
+}
+
+::-webkit-scrollbar-thumb{
+    background: rgb(201, 208, 207);
+}
+
+
+::-webkit-scrollbar-thumb:hover{
+    background: rgb(210, 167, 197);
+}
+
+
+
