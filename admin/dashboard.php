@@ -20,7 +20,7 @@
    <a href =" logout.php" class="btn btn-light btn-sm">LOG OUT</a>
   </div>
 
-  <?php require('inc/script.php'); ?>
+  <?php require('inc/scripts.php'); ?>
 
 
 
