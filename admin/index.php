@@ -4,7 +4,7 @@
 
    session_start();
    
-    if((isset($_SESSION['adminLogin']) && $_SESSION['adminLogin']==true))
+    if((isset($_SESSION['adminlogin']) && $_SESSION['adminlogin']==true))
         {
             redirect('dashboard.php');
        
@@ -51,7 +51,8 @@
     if(isset($_POST['login']))
     {
         $frm_data=filteration($_POST);
-        $query="SELECT * FROM 'admin_cred' WHERE 'admin_name'=? AND 'admin_pass'=?";
+        $query = "SELECT * FROM admin_cred WHERE admin_name=? AND admin_pass=?";
+
         $values=[$frm_data['admin_name'], $frm_data['admin_pass']];
         
 
@@ -60,8 +61,8 @@
         if($res->num_rows==1){
             echo"got user";
             $row=mysqli_fetch_assoc($res);
-            $_SESSIONI['adminlogin']=true;
-            $_SESSIONI['adminId']=$row['sr_no'];
+            $_SESSION['adminlogin']=true;
+            $_SESSION['adminId']=$row['sr_no'];
             redirect('dashboard.php');
             
         }
