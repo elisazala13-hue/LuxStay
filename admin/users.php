@@ -1,8 +1,14 @@
 <?php
-  require('inc/essentials.php');
-  adminlogin();
-  
-?>  
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/LuxStay/admin/inc/db_config.php';
+
+require('inc/essentials.php');
+session_start();
+// Kontrollo nëse admin është loguar
+if(!isset($_SESSION['adminlogin']) || $_SESSION['adminlogin'] !== true){
+redirect('index.php'); // ridrejto te login page nëse nuk është loguar
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,12 +20,8 @@
     <?php require('inc/links.php'); ?>
 </head>
 
-
-
-  <?php require('inc/scripts.php'); ?>
-
-
-
-    
+<body>
+  <?php require('inc/header.php');?>
+  <?php require('inc/scripts.php'); ?>    
 </body>
 </html>

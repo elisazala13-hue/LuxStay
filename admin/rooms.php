@@ -1,9 +1,18 @@
+<?php
+  require_once $_SERVER['DOCUMENT_ROOT'] . '/LuxStay/admin/inc/db_config.php';
+
+  require_once('inc/essentials.php');
+  session_start();
+    if(!isset($_SESSION['adminlogin']) || $_SESSION['adminlogin'] !== true){
+        redirect('index.php');
+    }
+?>  
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compitable" content="IE-edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <title>Admin Panel- Rooms</title>
      <?php require('inc/links.php');?>
@@ -24,7 +33,7 @@
                 </div>
                 <div class="table-responsive-lg" >
                   <table class="table table-hover border">
-                     <thead>
+                     <thead class="table-dark">
                       <tr class="bg-dark text-light">
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
@@ -68,19 +77,16 @@
                         <input type="text" name="quantity" class="form-control shadow-none" required></div>
                         <div class="col-md-6 mb-3"><label class="form-label fw-bold">Status</label>
                         <input type="text" name="status" class="form-control shadow-none" required></div>
-                        <div class="col-md-6 mb-3"><label class="form-label fw-bold">Action</label>
-                        <input type="text" name="action" class="form-control shadow-none" required></div>
                         <div class="col-12 mb-3">
                         <label class="form-label fw-bold">Features</label>
                         <div class="row">
-                                      <!--KRIJO TABELEN FEATURES??-->
                         <?php
                             $res= selectAll('features');
                             while($opt=mysqli_fetch_assoc($res)){
                             echo"
                             <div class='col-md-3 mb-1'>
                                 <label>
-                                <input type='checkbox' name='features' value='$opt[id]' class='form-check-input'>
+                                <input type='checkbox' name='features[]' value='$opt[id]' class='form-check-input'>
                                 $opt[name]
                                 </label>
                             </div>
@@ -92,14 +98,13 @@
                     <div class="col-12 mb-3">
                         <label class="form-label fw-bold">Facilities</label>
                         <div class="row">
-                                      <!--KRIJO TABELEN FACILITIES??-->
                         <?php
                             $res= selectAll('facilities');
                             while($opt=mysqli_fetch_assoc($res)){
                             echo"
                             <div class='col-md-3 mb-1'>
                                 <label>
-                                <input type='checkbox' name='facilities' value='$opt[id]' class='form-check-input'>
+                                <input type='checkbox' name='facilities[]' value='$opt[id]' class='form-check-input'>
                                 $opt[name]
                                 </label>
                             </div>
@@ -121,7 +126,7 @@
             </div>
 
         <!--Edit room Modal -->
-            <div class="modal fade" id="edit-room" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1" aria-hidden="true">
+            <div class="modal fade" id="edit-room" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1">
             <div class="modal-dialog">
                 <form id="edit_room_form" autocomplete="off">
                 <div class="modal-content">
@@ -157,7 +162,7 @@
                             echo"
                             <div class='col-md-3 mb-1'>
                                 <label>
-                                <input type='checkbox' name='features' value='$opt[id]' class='form-check-input'>
+                                <input type='checkbox' name='features[]' value='$opt[id]' class='form-check-input'>
                                 $opt[name]
                                 </label>
                             </div>
@@ -176,7 +181,7 @@
                             echo"
                             <div class='col-md-3 mb-1'>
                                 <label>
-                                <input type='checkbox' name='facilities' value='$opt[id]' class='form-check-input'>
+                                <input type='checkbox' name='facilities[]' value='$opt[id]' class='form-check-input'>
                                 $opt[name]
                                 </label>
                             </div>
@@ -242,10 +247,9 @@
          </div>
       </div>
    </div>
-
-    <?php require('inc/scripts.php');?>
-
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="scripts/rooms.js"> </script>
+    <script src="scripts/rooms.js"></script>
+    <?php require('inc/scripts.php');?>
     </body>
 </html>   
