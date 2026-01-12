@@ -4,7 +4,7 @@
   $uname='root';
   $pass='';
   $db='hoteli';
-  $con = mysqli_connect($hname, $uname, $pass, $db, 3307);
+  $con = mysqli_connect($hname, $uname, $pass, $db, 3306);
 
   if(!$con){
     die("Can not connect to Database".mysqli_connect_error());
