@@ -18,7 +18,7 @@
             <a href="users.php" class="nav-link text-light fw-semibold">User Management</a>
           </li>
           <li class="nav-item mb-2">
-            <a href="rooms.php" class="nav-link text-light fw-semibold">Rooms</a>
+            <a href="rooms.php" class="nav-link text-light fw-semibold" onclick="get_all_rooms()">Rooms</a>
           </li>
           <li class="nav-item mb-2">
             <a href="contact.php" class="nav-link text-light fw-semibold">Contact</a>

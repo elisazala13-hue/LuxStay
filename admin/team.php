@@ -1,7 +1,10 @@
 <?php
-  require('inc/essentials.php');
-  adminlogin();
-  
+  require_once $_SERVER['DOCUMENT_ROOT'] . '/LuxStay/admin/inc/db_config.php';
+  require_once('inc/essentials.php');
+  session_start();
+  if(!isset($_SESSION['adminlogin']) || $_SESSION['adminlogin'] !== true){
+      redirect('index.php');
+  }
 ?>  
 
 <!DOCTYPE html>
@@ -11,7 +14,9 @@
     <meta http-equiv="X-UA-Compatible" contect="IE-edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel- Management team</title>
-    <?php require('inc/links.php'); ?>
+    <?php require('inc/links.php');
+     require('inc/scripts.php');?>
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 
@@ -19,7 +24,7 @@
 
 <div class="container-fluid" id="main-content">
   <div class="row">
-    <div class="col-log-10 ms-auto p-4 overflow-hidden">
+    <div class="col-log-10 ms-auto p-4 overflow-hidden" style="margin-left:120px;  max-width:1050px;">
       <h3 class="mb-4">MANAGEMENT TEAM</h3>
       </div>
   </div>
@@ -27,14 +32,13 @@
   
 
   <!-- Management Team section -->
-<div class="card border-0 shadow-sm mb-4">
+<div class="card border-0 shadow-sm mb-4" style="margin-left:240px;  max-width:900px;">
   <div class="card-body">
-    <div class="d-flex align-items-center justify-content-between mb-3">
-      <button type="button" class="btn btn-dark shadow-none btn-sm" data-bs-toggle="modal" data-bs-target="#team-s">
-        <i class="bi bi-plus-square"></i> Add
-      </button>
-    </div>
-   
+    <div class="text-end mb-4">
+                 <button type="button" class="btn btn-dark shadow-none btn-sm" data-bs-toggle="modal" data-bs-target="#team-s">
+                    <i class="bi bi-plus-square"></i> Add
+                 </button>
+                </div>
     <div class="rom" id="team-data">
 
     </div>
@@ -103,7 +107,7 @@
 </div>
 </div>
 
-<?php require('inc/script.php'); ?>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
   let general_data,contacts_data;
   let team_s_form = document.getElementById('team_s_form');

@@ -1,14 +1,18 @@
 <?php
-   require('inc/essentials.php');
-   require('inc/db_config.php');
-   adminLogin();
+   require_once $_SERVER['DOCUMENT_ROOT'] . '/LuxStay/admin/inc/db_config.php';
 
+   require_once('inc/essentials.php');
+   session_start();
+
+   if(!isset($_SESSION['adminlogin']) || $_SESSION['adminlogin'] !== true){
+      redirect('index.php');
+   }
    if(isset($_GET['seen']))
    {
       $frm_data=filteration($_GET);
 
       if($frm_data['seen']=='all'){
-         $q="UPDATE `user_queries` SET 'seen'=?;";
+         $q="UPDATE `user_queries` SET `seen`=?;";
          $values=[1];
          if(update($q,$values,'i')){
             alert('success','Marked all as read');
@@ -33,8 +37,6 @@
       }
    }
 
-   
-   
    if(isset($_GET['del'])){
       $frm_data=filteration($_GET);
 
@@ -79,7 +81,7 @@
    <?php require('inc/header.php');?>
    <div class="container-fluid" id="main-content">
       <div class="row">
-         <div class="col-lg-10-ms-auto p-4 overflow-hidden">
+         <div class="col-lg-10-ms-auto p-4 overflow-hidden" style="margin-left:220px;  max-width:900px;">
             <h3 class="mb-4">CONTACT</h3>
 
             <div class="card border-0 shadow-sm mb-4">
@@ -97,7 +99,7 @@
                 <div class="table-responsive-md" style="height:150px; overflow-y: scroll;">
                   <table class="table table-hover border">
                      <thead class="sticky-top">
-                      <tr class="bg-dark text-light">>
+                      <tr class="bg-dark text-light">
                          <th scope="col">#</th>
                          <th scope="col">Name</th>
                          <th scope="col">Email</th>
@@ -109,7 +111,7 @@
                      </thead>
                      <tbody>
                         <?php 
-                           $q="SELECT * FROM 'user_queries' ORDER BY 'user_id' Desc";
+                           $q="SELECT * FROM `user_queries` ORDER BY `user_id` Desc";
                            $data=mysqli_query($con,$q);
                            $i=1;
                            while($row=mysqli_fetch_assoc($data)){

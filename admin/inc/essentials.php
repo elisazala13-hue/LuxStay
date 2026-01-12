@@ -26,16 +26,33 @@ function redirect($url)
 }
 
 
-function alert($type, $msg)
+function alert($type, $msg, $timeout = 1000)
 {
+    // Zgjidh klasin bootstrap sipas tipit
     $bs_class = ($type === "success") ? "alert-success" : "alert-danger";
+
+    // Shfaq alert-in
     echo <<<alert
-<div class="alert $bs_class alert-dismissible fade show custom-alert" role="alert">
+<div class="alert $bs_class fade show custom-alert" role="alert">
     <strong class="me-3">$msg</strong>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
+
+<script>
+// Pasi faqja të ngarkohet
+setTimeout(() => {
+    const el = document.querySelector('.custom-alert');
+    if(el) {
+        // heq 'show' për animacion fade-out
+        el.classList.remove('show');
+        // largon alert nga DOM pas 500ms për t'i dhënë kohë animacionit
+        setTimeout(() => el.remove(), 500);
+    }
+}, $timeout);
+</script>
 alert;
 }
+
+
 
 
 function uploadImage($image, $folder)
@@ -73,10 +90,11 @@ function deleteImage($image, $folder)
 
 function selectAll($table)
 {
-    require('db_config.php'); 
+    global $con;
     $res = mysqli_query($con, "SELECT * FROM $table");
     return $res;
 }
+
 function insert($query, $values, $types) {
     global $con; 
 
@@ -96,6 +114,24 @@ function insert($query, $values, $types) {
     return $res; 
 }
 
+function update($query, $values = [], $types = "") {
+    global $con; // përdor lidhjen globale me DB
+
+    $stmt = mysqli_prepare($con, $query);
+    if(!$stmt){
+        die("Prepared statement failed: " . mysqli_error($con));
+    }
+
+    if(!empty($values)){
+        mysqli_stmt_bind_param($stmt, $types, ...$values);
+    }
+
+    $res = mysqli_stmt_execute($stmt);
+
+    mysqli_stmt_close($stmt);
+
+    return $res; // true nëse punoi, false nëse dështoi
+}
 
 
 
