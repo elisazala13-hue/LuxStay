@@ -4,22 +4,24 @@
   $uname='root';
   $pass='';
   $db='hoteli';
-  $con = mysqli_connect($hname, $uname, $pass, $db);
+  $con = mysqli_connect($hname, $uname, $pass, $db, 3307);
 
   if(!$con){
     die("Can not connect to Database".mysqli_connect_error());
  }
  
-  function filteration($data){
-    foreach($data as $key =>$value){
-        $data[$key] =trim($value);
-        $data[$key] =stripcslashes($value);
-        $data[$key] =htmlspecialchars($value);
-        $data[$key] =strip_tags($value);
-      
+     function filteration($data){
+        foreach($data as $key => $value){
+            $value = trim($value);
+            $value = stripslashes($value);
+            $value = htmlspecialchars($value);
+            $value = strip_tags($value);
+            $data[$key] = $value;
+        }
+        return $data;
     }
-    return $data;
-  }
+
+
 
   function select($sql,$values,$datatypes)
   {

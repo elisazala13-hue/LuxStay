@@ -1,8 +1,9 @@
 <?php
 
 
-require('../inc/db_config.php');
-require('../inc/essentials.php');
+require_once $_SERVER['DOCUMENT_ROOT'] . '/LuxStay/admin/inc/db_config.php';
+
+require_once('../inc/essentials.php');
 
 adminLogin();
 
