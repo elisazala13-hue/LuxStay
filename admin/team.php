@@ -20,6 +20,7 @@
 </head>
 <body class="bg-light">
 
+
  <?php require('inc/header.php'); ?>
 
 <div class="container-fluid" id="main-content">
@@ -49,7 +50,7 @@
 <!-- Management Team modal -->
 <div class="modal fade" id="team-s" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1">
   <div class="modal-dialog">
-    <form id="team_s_form">
+    <form id="team_s_form" >
       <div class="modal-content">
         
         <div class="modal-header">
@@ -115,8 +116,12 @@
   let member_name_inp=document.getElementById('member_name_inp');
   let member_picture_inp=document.getElementById('member_picture_inp');
 
+  console.log('form obj:', team_s_form);//E SHTOI XHOI
+
+
 team_s_form.addEventListener('submit',function(e){
   e.preventDefault();
+  console.log('FORM SUBMITTED');   // DEBUG
   add_member();
 });
 
@@ -133,25 +138,26 @@ function add_member(){
 
   
     xhr.onload = function(){
-        var myModal = document.getElementById('team-s');
-        var modal = bootstrap.Modal.getInstance(myModal);
-        modal.hide();
+        console.log('RESPONSE:', this.responseText);//DEBUG
+         var myModal = document.getElementById('team-s');
+         var modal = bootstrap.Modal.getInstance(myModal);
+         modal.hide();
 
-        if(this.responseText == 'inv_img'){
-            alert('error','Only JPG and PNG images are allowed!');
-        }
-        else if(this.responseText == 'inv_size'){
-            alert('error','Image should be less than 2MB!');
-        }
-        else if(this.responseText == 'upd_failed'){
-            alert('error','Image upload failed. Server Down!');
-        }
-        else{
-            alert('success','New member added!');
-            member_name_inp.value='';
-            member_picture_inp.value='';
-            get_members();
-        }
+         if(this.responseText == 'inv_img'){
+             alert('error','Only JPG and PNG images are allowed!');
+         }
+         else if(this.responseText == 'inv_size'){
+             alert('error','Image should be less than 2MB!');
+         }
+         else if(this.responseText == 'upd_failed'){
+             alert('error','Image upload failed. Server Down!');
+         }
+         else{
+             alert('success','New member added!');
+             member_name_inp.value='';
+             member_picture_inp.value='';
+             get_members();
+         }
     }
 
   
@@ -197,6 +203,7 @@ function rem_member(val)
 window.onload = function(){
     get_members();
 }
+</script>
 
     
 </body>

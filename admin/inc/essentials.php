@@ -11,7 +11,7 @@ define("ABOUT_FOLDER", "about/");
 function adminlogin()
 {
     session_start();
-    if (!(isset($_SESSION['adminLogin']) && $_SESSION['adminLogin'] === true)) {
+    if (!(isset($_SESSION['adminlogin']) && $_SESSION['adminlogin'] === true)) {
         echo "<script>window.location.href='index.php';</script>";
         exit;
     }
@@ -66,7 +66,7 @@ function uploadImage($image, $folder)
         return 'inv_size';
     } else {
         $ext = pathinfo($image['name'], PATHINFO_EXTENSION);
-        $rname = 'IMG_' . random_int(11111, 99999) . "." . $ext;
+        $rname = 'IMG_' . random_int(11111, 99999) . ".$ext";
         $img_path = UPLOAD_IMAGE_PATH . $folder . $rname;
 
         if (move_uploaded_file($image['tmp_name'], $img_path)) {
@@ -77,7 +77,7 @@ function uploadImage($image, $folder)
     }
 }
 
-
+ 
 function deleteImage($image, $folder)
 {
     $path = UPLOAD_IMAGE_PATH . $folder . $image;
