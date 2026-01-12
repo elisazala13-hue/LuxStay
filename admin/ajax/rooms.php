@@ -1,63 +1,70 @@
 <?php
-require('../inc/db_config.php');
-require('../inc/essentials.php');
-adminlogin();
+require_once $_SERVER['DOCUMENT_ROOT'] . '/LuxStay/admin/inc/db_config.php';
+
+require_once('../inc/essentials.php');
+
+adminLogin();
+
 
 if (isset($_POST['add_room'])) {
-    $features = filteration(json_decode($_POST['features']));
-    $facilities = filteration(json_decode($_POST['facilities']));
+
+    // 1️⃣ Merr features dhe facilities, nëse nuk ka vendos array bosh
+    $features = isset($_POST['features']) ? filteration(json_decode($_POST['features'])) : [];
+    $facilities = isset($_POST['facilities']) ? filteration(json_decode($_POST['facilities'])) : [];
 
     $frm_data = filteration($_POST);
     $flag = 0;
 
-    $q1 = "INSERT INTO `rooms` (`name`, `area`, `price`, `quantity`, `adults`, `children`) VALUES (?, ?, ?, ?, ?, ?)";
-    $values = [$frm_data['name'], $frm_data['area'], $frm_data['price'], $frm_data['quantity'], $frm_data['adults'], $frm_data['children']];
+    // 2️⃣ Insert room
+    $q1 = "INSERT INTO `rooms` (`name`, `area`, `price`, `quantity`, `adults`, `children`, `status`) VALUES (?, ?, ?, ?, ?, ?, 1)";
+    $values = [
+        $frm_data['name'],
+        (int)$frm_data['area'],
+        (int)$frm_data['price'],
+        (int)$frm_data['quantity'],
+        (int)$frm_data['adults'],
+        (int)$frm_data['children']
+    ];
 
-    if(insert($q1, $values, 'siiiiss')){
+    if(insert($q1, $values, 'siiiii')) {
         $flag = 1;
+    } else {
+        die('Room insert failed: ' . mysqli_error($con));
     }
 
     $room_id = mysqli_insert_id($con);
 
-    $q2 = "INSERT INTO `room_facilities`(`room_id`, `facilities_id`) VALUES (?, ?)";
-
-     if($stmt = mysqli_prepare($con, $q3))
-    {
-        foreach($facilities as $f){
-            mysqli_stmt_bind_param($stmt, 'ii', $room_id, $f);
-            mysqli_stmt_execute($stmt);
+    // 3️⃣ Insert facilities
+    if(!empty($facilities)) {
+        $q2 = "INSERT INTO `room_facilities`(`room_id`, `facilities_id`) VALUES (?, ?)";
+        if($stmt = mysqli_prepare($con, $q2)) {
+            foreach($facilities as $f) {
+                $f = (int)$f; // sigurohet që është integer
+                mysqli_stmt_bind_param($stmt, 'ii', $room_id, $f);
+                mysqli_stmt_execute($stmt);
+            }
+            mysqli_stmt_close($stmt);
+        } else {
+            die('Facilities query cannot be prepared: ' . mysqli_error($con));
         }
-        mysqli_stmt_close($stmt);
-    }
-    else{
-        $flag = 0;
-        die('query cannot be prepared - insert');
     }
 
-    $q3 = "INSERT INTO `room_features`(`room_id`, `features_id`) VALUES (?, ?)";
-
-    if($stmt = mysqli_prepare($con, $q3))
-    {
-        foreach($features as $f){
-            mysqli_stmt_bind_param($stmt, 'ii', $room_id, $f);
-            mysqli_stmt_execute($stmt);
+    // 4️⃣ Insert features
+    if(!empty($features)) {
+        $q3 = "INSERT INTO `room_features`(`room_id`, `features_id`) VALUES (?, ?)";
+        if($stmt = mysqli_prepare($con, $q3)) {
+            foreach($features as $f) {
+                $f = (int)$f; // sigurohet që është integer
+                mysqli_stmt_bind_param($stmt, 'ii', $room_id, $f);
+                mysqli_stmt_execute($stmt);
+            }
+            mysqli_stmt_close($stmt);
+        } else {
+            die('Features query cannot be prepared: ' . mysqli_error($con));
         }
-        mysqli_stmt_close($stmt);
-    }
-    else{
-        $flag = 0;
-        die('query cannot be prepared - insert');
     }
 
-    if($flag){
-        echo 1;
-    }
-    else{
-        echo 0;
-    }
-
-
-
+    echo $flag ? 1 : 0;
 }
 
 if (isset($_POST['get_all_rooms'])) {
@@ -119,7 +126,6 @@ if (isset($_POST['get_all_rooms'])) {
 
     echo $data;
 }
-
 
 if (isset($_POST['toggle_status']))
 {
@@ -196,10 +202,10 @@ if(isset($_POST['edit_room'])){
            `price`=?,
            `quantity`=?,
            `adults`=?,
-           `children`=?,
-           `description`=?
+           `children`=?
        WHERE `id`=?";
     $values = [$frm_data['name'], $frm_data['area'], $frm_data['price'], $frm_data['quantity'], $frm_data['adults'], $frm_data['children'], $frm_data['room_id']];
+
 
     if(update($q1, $values, 'siiiiisi')){
         $flag = 1;
@@ -207,10 +213,6 @@ if(isset($_POST['edit_room'])){
 
     $del_features = delete("DELETE FROM `room_features` WHERE `room_id`=?", [$frm_data['room_id']], 'i');
     $del_facilities = delete("DELETE FROM `room_facilities` WHERE `room_id`=?", [$frm_data['room_id']], 'i');
-
-    if($del_facilities && $del_features ){
-        $flag = 0;
-    }
 
      $q2 = "INSERT INTO `room_facilities`(`room_id`, `facilities_id`) VALUES (?, ?)";
 

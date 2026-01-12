@@ -1,12 +1,13 @@
-<?php 
-   require('inc/essentials.php');
-   require('inc/db_config.php');
+<?php
+   require_once $_SERVER['DOCUMENT_ROOT'] . '/LuxStay/admin/inc/db_config.php';
+
+   require_once('inc/essentials.php');
 
    session_start();
    
     if((isset($_SESSION['adminlogin']) && $_SESSION['adminlogin']==true))
         {
-            redirect('dashboard.php');
+            redirect('users.php');
        
     
         }
@@ -63,13 +64,11 @@
             $row=mysqli_fetch_assoc($res);
             $_SESSION['adminlogin']=true;
             $_SESSION['adminId']=$row['sr_no'];
-            redirect('dashboard.php');
+            redirect('users.php');
             
         }
         else{
             alert('error' ,'Login failed-Invalid Credentials!');
-           
-
             }
         
     }

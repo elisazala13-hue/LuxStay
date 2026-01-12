@@ -1,69 +1,66 @@
-
+    document.addEventListener("DOMContentLoaded", function() {
         let add_room_form = document.getElementById('add_room_form');
-        add_room_form.addEventListener('submit', function(e){
-            e.preventDefault();
-            edit_room();
-        });
-        
+        if(add_room_form){
+            add_room_form.addEventListener('submit', function(e){
+                e.preventDefault();
+                add_room();
+            });
+        }
+
         let edit_room_form = document.getElementById('edit_room_form');
-        edit_room_form.addEventListener('submit', function(e){
-            e.preventDefault();
-            add_room();
-        });
+        if(edit_room_form){
+            edit_room_form.addEventListener('submit', function(e){
+                e.preventDefault();
+                add_edit_room();
+            });
+        }
 
         let add_image_form = document.getElementById('add_image_form');
-        add_image_form.addEventListener('submit', function(e){
-            e.preventDefault();
-            add_image();
-        });
-
-        function add_room(){
-            let data=new FormData();
-            data.append('add_room','');
-            data.append('name',add_room_form.elements['name'].value);
-            data.append('area',add_room_form.elements['area'].value);
-            data.append('price',add_room_form.elements['price'].value);
-            data.append('quantity',add_room_form.elements['quantity'].value);
-            data.append('adults',add_room_form.elements['adults'].value);
-            data.append('children',add_room_form.elements['children'].value);
-            
-            let features=[];
-            add_room_form.elements['features'].forEach(el => {
-                if(el.checked){
-                    features.push(el.value);
-                }
+        if(add_image_form){
+            add_image_form.addEventListener('submit', function(e){
+                e.preventDefault();
+                add_image();
             });
-            let facilities=[];
-            add_room_form.elements['facilities'].forEach(el => {
-                if(el.checked){
-                    facilities.push(el.value);
+        }
+    });
+
+
+        function add_room() {
+            let form = document.getElementById('add_room_form');
+            let data = new FormData(form);
+
+            // Checkbox features
+            let features = [];
+            form.querySelectorAll('input[name="features[]"]:checked').forEach(el => features.push(el.value));
+            data.append('features', JSON.stringify(features));
+
+            // Checkbox facilities
+            let facilities = [];
+            form.querySelectorAll('input[name="facilities[]"]:checked').forEach(el => facilities.push(el.value));
+            data.append('facilities', JSON.stringify(facilities));
+
+            data.append('add_room', '');
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', 'ajax/rooms.php', true);
+
+            xhr.onload = function() {
+                let modalEl = document.getElementById('add-room');
+                let modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+
+                if(this.responseText == 1){
+                    alert('success', 'New room added!');
+                    form.reset();
+                    get_all_rooms();
+                } else {
+                    alert('error', 'Server Down!');
                 }
-            });
-
-            
-            data.append('features',JSON.stringify(features));
-            data.append('facilities',JSON.stringify(facilities));
-
-            let xhr= new XMLHttpRequest();
-            xhr.open('POST', "ajax/rooms.php", true);
-
-            xhr.onload =function(){
-                    var myModal = document.getElementById('add-room');
-                    var modal = bootstrap.Modal.getInstance(myModal);
-                    modal.hide();
-
-                    if(this.responseText == 1){
-                        alert('success', 'New room added!');
-                        add_room_form.reset();
-                        get_all_rooms();
-                    }
-                    else{
-                        alert('error', 'Server Down!');
-                    }
-                }
+            }
 
             xhr.send(data);
         }
+
         
         function get_all_rooms(){
                 let xhr = new XMLHttpRequest();
@@ -94,48 +91,46 @@
             }
 
         function edit_room(id){
-            let xhr= new XMLHttpRequest();
-            xhr.open('POST', "ajax/rooms.php", true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        let xhr= new XMLHttpRequest();
+        xhr.open('POST', "ajax/rooms.php", true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-            xhr.onload =function(){
-                xhr.onload = function() {
-                let data = JSON.parse(this.responseText);
+        xhr.onload = function() {
+            let data = JSON.parse(this.responseText);
 
-                edit_room_form.elements['name'].value = data.roomdata.name;
-                edit_room_form.elements['area'].value = data.roomdata.area;
-                edit_room_form.elements['price'].value = data.roomdata.price;
-                edit_room_form.elements['quantity'].value = data.roomdata.quantity;
-                edit_room_form.elements['adults'].value = data.roomdata.aduls;
-                edit_room_form.elements['children'].value = data.roomdata.children;
-                edit_room_form.elements['room_id'].value = data.roomdata.id;
+            edit_room_form.elements['name'].value = data.roomdata.name;
+            edit_room_form.elements['area'].value = data.roomdata.area;
+            edit_room_form.elements['price'].value = data.roomdata.price;
+            edit_room_form.elements['quantity'].value = data.roomdata.quantity;
+            edit_room_form.elements['adults'].value = data.roomdata.adults; // gabim: ishte "aduls"
+            edit_room_form.elements['children'].value = data.roomdata.children;
+            edit_room_form.elements['room_id'].value = data.roomdata.id;
 
-                    
-                    edit_room_form.elements['features'].forEach(el => {
-                        if(data.features.includes(Number(el.value))){
-                            el.checked=true;
-                        }
-                    });
-                    edit_room_form.elements['facilities'].forEach(el => {
-                        if(data.facilities.includes(el.value)){
-                            el.checked=true;
-                        }
-                    });
-            }                 
-            }
-            xhr.send('get_room'+id)
+            edit_room_form.elements['features'].forEach(el => {
+                el.checked = data.features.includes(Number(el.value));
+            });
+            edit_room_form.elements['facilities'].forEach(el => {
+                el.checked = data.facilities.includes(Number(el.value));
+            });
+
+            var myModal = new bootstrap.Modal(document.getElementById('edit-room'));
+            myModal.show();  // hap modalin
         }
 
-        function add_edit_room(){
+        xhr.send('get_room=' + id); // shto '='
+    }
+
+    function add_edit_room(){
             let data=new FormData();
             data.append('edit_room','');
-            data.append('room_id',add_edit_room.elements['room_id'].value);
-            data.append('name',add_edit_room.elements['name'].value);
-            data.append('area',add_edit_room.elements['area'].value);
-            data.append('price',add_edit_room.elements['price'].value);
-            data.append('quantity',add_edit_room.elements['quantity'].value);
-            data.append('adults',add_edit_room.elements['adults'].value);
-            data.append('children',add_edit_room.elements['children'].value);
+            let edit_room_form = document.getElementById('edit_room_form');
+            data.append('name', edit_room_form.elements['name'].value);
+            data.append('area', edit_room_form.elements['area'].value);
+            data.append('price', edit_room_form.elements['price'].value);
+            data.append('quantity', edit_room_form.elements['quantity'].value);
+            data.append('adults', edit_room_form.elements['adults'].value);
+            data.append('children', edit_room_form.elements['children'].value);
+
             
             let features=[];
             add_edit_room.elements['features'].forEach(el => {
