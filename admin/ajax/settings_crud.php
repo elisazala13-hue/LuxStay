@@ -77,3 +77,5 @@ if(isset($_POST['rem_member']))
     }
 
 }
+
+?>

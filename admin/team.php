@@ -40,7 +40,23 @@
                     <i class="bi bi-plus-square"></i> Add
                  </button>
                 </div>
-    <div class="rom" id="team-data">
+     <div class="row" id="team-data">
+      <div class="col-md-2 mb-3">
+        <div class="card bg-dark text-white">
+          <img src="../images/about/team.jpg" class="card-img">
+          <div class="card-img-overlay text-end">
+            <button type="button" class="btn btn-danger btn-sm shadow-none"><i class="bi bi-trash"></i>
+              Delete
+            </button>
+          </div>
+          <p class="card-text text-center px-3 py-2">Random Name</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 
     </div>
   
@@ -116,12 +132,11 @@
   let member_name_inp=document.getElementById('member_name_inp');
   let member_picture_inp=document.getElementById('member_picture_inp');
 
-  console.log('form obj:', team_s_form);//E SHTOI XHOI
+  
 
 
 team_s_form.addEventListener('submit',function(e){
   e.preventDefault();
-  console.log('FORM SUBMITTED');   // DEBUG
   add_member();
 });
 
@@ -175,7 +190,7 @@ function get_members()
     xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 
     xhr.onload = function(){
-
+     document.getElementById('team-data').innerHTML = this.responseText;
     }
 
     xhr.send('get_members');
