@@ -29,7 +29,21 @@
 </head>
 <body>
 
-<?php require('inc/header.php'); ?>
+<?php 
+require('inc/header.php');
+
+// KRIJO DATABASE CONNECTION MANUALISHT
+$con = mysqli_connect("localhost", "root", "", "hoteli");
+
+if(!$con) {
+echo "<div class='alert alert-danger m-3'>Database connection failed: " . mysqli_connect_error() . "</div>";
+    require('admin/inc/essentials.php');
+    $no_db = true;
+} else {
+    require('admin/inc/essentials.php');
+    $no_db = false;
+}
+?>
 
 <!--Picture Crousel-->
     <div class="container-fluid">
@@ -98,90 +112,105 @@
         </div>
     </div>
 
-<!--Our Rooms-->   
-    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">OUR ROOMS</h2>
-    <div class="container">
-        <div class="row">
-         <?php
-        require('admin/inc/db_config.php');
-        require('admin/inc/essentials.php');
-
-        $room_res = select("SELECT * FROM `rooms` WHERE `status`=? AND `removed`=? LIMIT 3 ORDER BY `id` DESC",[1,0], 'ii');
-
-        while($room_data = mysqli_fetch_assoc($room_res)) {
-
-                // Features
-                $fea_q = mysqli_query($con,"SELECT f.name FROM `features` f
-                    INNER JOIN `room_features` rfea ON f.id = rfea.features_id
-                    WHERE rfea.room_id = '{$room_data['id']}'");
-
-                $features_data = "";
-                while($fea_row = mysqli_fetch_assoc($fea_q)){
-                    $features_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap'>{$fea_row['name']}</span> ";
-                }
-
-                // Facilities
-                $fac_q = mysqli_query($con,"SELECT f.name FROM `facilities` f
-                    INNER JOIN `room_facilities` rfac ON f.id = rfac.facilities_id
-                    WHERE rfac.room_id = '{$room_data['id']}'");
-
-                $facilities_data = "";
-                while($fac_row = mysqli_fetch_assoc($fac_q)){
-                    $facilities_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap'>{$fac_row['name']}</span> ";
-                }
-
-                // Image
-                $img_q = mysqli_query($con,"SELECT * FROM `room_images`
-                    WHERE `room_id`='{$room_data['id']}'
-                    ORDER BY `id` ASC
-                    LIMIT 1");
-
-                $room_thumb = ROOMS_IMG_PATH."default.jpg";
-                if(mysqli_num_rows($img_q) > 0){
-                    $img_res = mysqli_fetch_assoc($img_q);
-                    $room_thumb = ROOMS_IMG_PATH.$img_res['image'];
-                }
-
-                // HTML
-               echo <<<data
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100 border-0 shadow">
-                        <div class="p-3">
-                            <img src="{$room_thumb}" class="img-fluid rounded mb-3">
-
-                            <h5 class="mb-2">{$room_data['name']}</h5>
-
-                            <div class="features mb-2">
-                                <h6 class="mb-1">Features</h6>
-                                {$features_data}
-                            </div>
-
-                            <div class="facilities mb-2">
-                                <h6 class="mb-1">Facilities</h6>
-                                {$facilities_data}
-                            </div>
-
-                            <div class="guests mb-3">
-                                <h6 class="mb-1">Guests</h6>
-                                <span class='badge rounded-pill bg-light text-dark'>{$room_data['adults']} Adults</span>
-                                <span class='badge rounded-pill bg-light text-dark'>{$room_data['children']} Children</span>
-                            </div>
-
-                            <h6 class="mb-3">{$room_data['price']}€ per night</h6>
-
-                            <a href="#" class="btn btn-sm btn-primary shadow-none w-100">Book Now</a>
+<!-- Our Rooms -->   
+<h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">OUR ROOMS</h2>
+<div class="container">
+    <div class="row">
+        <?php
+        if(!$no_db && $con) {
+            $query = "SELECT * FROM `rooms` WHERE `status` = 1 AND `removed` = 0 ORDER BY `id` DESC LIMIT 3";
+            $room_res = mysqli_query($con, $query);
+            
+            if(!$room_res) {
+                echo "<div class='alert alert-danger'>Error in SQL query: " . mysqli_error($con) . "</div>";
+            } elseif(mysqli_num_rows($room_res) == 0) {
+                echo "<div class='col-12 text-center'><p>No rooms available at the moment.</p></div>";
+            } else {
+                while($room_data = mysqli_fetch_assoc($room_res)) {
+                    $features_data = "";
+                    $fea_q = mysqli_query($con, 
+                        "SELECT f.name FROM `features` f
+                        INNER JOIN `room_features` rfea ON f.id = rfea.features_id
+                        WHERE rfea.room_id = '{$room_data['id']}'");
+                    
+                    if($fea_q) {
+                        while($fea_row = mysqli_fetch_assoc($fea_q)){
+                            $features_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>{$fea_row['name']}</span>";
+                        }
+                    }
+                    
+                    $facilities_data = "";
+                    $fac_q = mysqli_query($con,
+                        "SELECT f.name FROM `facilities` f
+                        INNER JOIN `room_facilities` rfac ON f.id = rfac.facilities_id
+                        WHERE rfac.room_id = '{$room_data['id']}'");
+                    
+                    if($fac_q) {
+                        while($fac_row = mysqli_fetch_assoc($fac_q)){
+                            $facilities_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>{$fac_row['name']}</span>";
+                        }
+                    }
+                    
+                    if(!empty($room_data['image'])) {
+                        $room_thumb = "admin/images/rooms/" . $room_data['image'];
+                    }
+                    
+            
+                    ?>
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card h-100 border-0 shadow">
+                            <div class="p-3">
+                                <img src="<?php echo $room_thumb; ?>" class="img-fluid rounded mb-3" style="height: 200px; object-fit: cover;" 
+                                     alt="<?php echo htmlspecialchars($room_data['name']); ?>"
+                                     onerror="this.src='images/default.jpg'">
+                                <h5 class="mb-2"><?php echo htmlspecialchars($room_data['name']); ?></h5>
+                                
+                                <?php if(!empty($features_data)): ?>
+                                <div class="features mb-2">
+                                    <h6 class="mb-1">Features</h6>
+                                    <?php echo $features_data; ?>
+                                </div>
+                                <?php endif; ?>
+                                
+                                <?php if(!empty($facilities_data)): ?>
+                                <div class="facilities mb-2">
+                                    <h6 class="mb-1">Facilities</h6>
+                                    <?php echo $facilities_data; ?>
+                                </div>
+                                <?php endif; ?>
+                                
+                                <div class="guests mb-3">
+                                    <h6 class="mb-1">Guests</h6>
+                                    <span class='badge rounded-pill bg-light text-dark me-1'>
+                                        <?php echo $room_data['adults']; ?> Adults
+                                    </span>
+                                    <span class='badge rounded-pill bg-light text-dark'>
+                                        <?php echo $room_data['children']; ?> Children
+                                    </span>
+                                </div>
+                                
+                                <h6 class="mb-3"><?php echo number_format($room_data['price'], 2); ?>€ per night</h6>
+                                
+                                <a href="room_details.php?id=<?php echo $room_data['id']; ?>" class="btn btn-sm btn-primary shadow-none w-100">
+                                    Book Now
+                            </a>
                         </div>
                     </div>
                 </div>
-                data;
-
+                <?php
+                }
             }
+        } else {
+            echo "<div class='col-12 text-center'><p>Rooms information currently unavailable. Please check back later.</p></div>";
+        }
         ?>
-            <div class="col-lg-12 text-end mt-5">
+        
+        
+        <div class="col-lg-12 text-end mt-5">
             <a href="rooms.php" class="btn btn-outline-dark rounded-0 fw-bold shadow-none">More Rooms >>></a>
-            </div>
         </div>
     </div>
+</div>
 
 <!--Our Facilities-->   
     <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">OUR FACILITIES</h2>

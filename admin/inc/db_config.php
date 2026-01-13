@@ -4,7 +4,7 @@
   $uname='root';
   $pass='';
   $db='hoteli';
-  $con = mysqli_connect($hname, $uname, $pass, $db, 3306);
+  $con = mysqli_connect($hname, $uname, $pass, $db, 3307);
 
   if(!$con){
     die("Can not connect to Database".mysqli_connect_error());
@@ -57,12 +57,12 @@ function update($sql,$values,$datatypes)
         }
         else{
              mysqli_stmt_close($stmt);
-            die("Query can not be executed - Select");
+            return false;
 
         }
     }
     else{
-        die("Query can not be prepared - Select");
+        return false;
     }
   }
 
@@ -79,11 +79,11 @@ function update($sql,$values,$datatypes)
         }
         else{
             mysqli_stmt_close($stmt);
-            die("Query can not be executed - Insert");
+            return false;
         }
     }
     else{
-        die("Query can not be prepared - Insert");
+        return false;
     }
 }
 

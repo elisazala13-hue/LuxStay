@@ -9,7 +9,9 @@ define("ABOUT_FOLDER", "about/");
 
 function adminlogin()
 {
-
+    if(session_status() == PHP_SESSION_NONE){
+        session_start();
+    }
     if (!(isset($_SESSION['adminlogin']) && $_SESSION['adminlogin'] === true)) {
         echo "<script>window.location.href='index.php';</script>";
         exit;
@@ -74,5 +76,7 @@ function selectAll($table)
     $res = mysqli_query($con, "SELECT * FROM $table");
     return $res;
 }
+
+
 
 ?>
