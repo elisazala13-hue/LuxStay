@@ -21,6 +21,8 @@ redirect('index.php'); // ridrejto te login page nëse nuk është loguar
 </head>
 
 <body>
+
+<body>
   <?php require('inc/header.php');?>
   <?php require('inc/scripts.php'); ?>    
 </body>

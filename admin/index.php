@@ -5,7 +5,7 @@
 
    session_start();
    
-    if((isset($_SESSION['adminlogin']) && $_SESSION['adminlogin']==true))
+    if((isset($_SESSION['adminLogin']) && $_SESSION['adminLogin']==true))
         {
             redirect('users.php');
        
@@ -62,7 +62,7 @@
         if($res->num_rows==1){
             echo"got user";
             $row=mysqli_fetch_assoc($res);
-            $_SESSION['adminlogin']=true;
+            $_SESSION['adminLogin']=true;
             $_SESSION['adminId']=$row['sr_no'];
             redirect('users.php');
             

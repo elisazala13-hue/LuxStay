@@ -1,18 +1,14 @@
 <?php
-   require_once $_SERVER['DOCUMENT_ROOT'] . '/LuxStay/admin/inc/db_config.php';
+   require('inc/essentials.php');
+   require('inc/db_config.php');
+   adminLogin();
 
-   require_once('inc/essentials.php');
-   session_start();
-
-   if(!isset($_SESSION['adminlogin']) || $_SESSION['adminlogin'] !== true){
-      redirect('index.php');
-   }
    if(isset($_GET['seen']))
    {
       $frm_data=filteration($_GET);
 
       if($frm_data['seen']=='all'){
-         $q="UPDATE `user_queries` SET `seen`=?;";
+         $q="UPDATE `user_queries` SET 'seen'=?;";
          $values=[1];
          if(update($q,$values,'i')){
             alert('success','Marked all as read');
@@ -37,69 +33,57 @@
       }
    }
 
+   
+   
    if(isset($_GET['del'])){
       $frm_data=filteration($_GET);
 
-      if($frm_data['del']=='all'){
-         $q=" DELETE FROM `user_queries` ";
-         if(mysqli_query($con,$q)){
-            alert('success','ALL data deleted');
-
-         }
-         else{
-            alert('error','Operation failed!');
-
-         }
-
-      }
-      else{
-         $q=" DELETE FROM `user_queries` WHERE 'user_id'=?";
-         $values=[1,$frm_data,['del']];
-         if(delete($q,$values,'ii')){
-            alert('success','Data deleted');
-
-         }
-         else{
-            alert('error','Operation failed!');
-
-         }
-      }
-   }
-
-
+    if ($frm_data['del'] == 'all') {
+        $q = "DELETE FROM `user_queries`";
+        mysqli_query($con, $q);
+        alert('success', 'All data deleted');
+    } else {
+        $q = "DELETE FROM `user_queries` WHERE `user_id`=?";
+        $values = [$frm_data['del']];
+        delete($q, $values, 'i');
+        alert('success', 'Data deleted');
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compitable" content="IE-edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Admin Panel- Contact</title>
-     <?php require('inc/links.php');?>
+    <title>Admin Panel - Contact</title>
+    <?php require('inc/links.php'); ?>
 </head>
+
 <body class="bg-light">
    <?php require('inc/header.php');?>
    <div class="container-fluid" id="main-content">
       <div class="row">
-         <div class="col-lg-10-ms-auto p-4 overflow-hidden" style="margin-left:220px;  max-width:900px;">
+         <div class="col-lg-10-ms-auto p-4 overflow-hidden">
             <h3 class="mb-4">CONTACT</h3>
 
             <div class="card border-0 shadow-sm mb-4">
-               <div class="card-body">
+                <div class="card-body">
 
-                <div class="text-end mb-4">
-                  <a href="?seen=all" class="btn btn-dark rounded-pill shadow-none btn-sm">
-                    <i class="bi bi-chech-all"></i> Mark all  read
-                  </a>
-                  <a href="?del=all" class="btn btn-danger rounded-pill shadow-none btn-sm">
-                     <i class="bi bi-trash"></i> Delete all
-                  </a>
-                </div>
+                    <div class="text-end mb-4">
+                        <a href="?seen=all" class="btn btn-dark btn-sm rounded-pill">
+                            <i class="bi bi-check-all"></i> Mark all read
+                        </a>
+                        <a href="?del=all" class="btn btn-danger btn-sm rounded-pill">
+                            <i class="bi bi-trash"></i> Delete all
+                        </a>
+                    </div>
 
                 <div class="table-responsive-md" style="height:150px; overflow-y: scroll;">
                   <table class="table table-hover border">
                      <thead class="sticky-top">
-                      <tr class="bg-dark text-light">
+                      <tr class="bg-dark text-light">>
                          <th scope="col">#</th>
                          <th scope="col">Name</th>
                          <th scope="col">Email</th>
@@ -111,7 +95,7 @@
                      </thead>
                      <tbody>
                         <?php 
-                           $q="SELECT * FROM `user_queries` ORDER BY `user_id` Desc";
+                           $q="SELECT * FROM 'user_queries' ORDER BY 'user_id' Desc";
                            $data=mysqli_query($con,$q);
                            $i=1;
                            while($row=mysqli_fetch_assoc($data)){
@@ -121,35 +105,31 @@
                               }
                               $seen="<a href='?del=$row[user_id]' class='btn btn-sm rounded-pill btn-danger mt-2'>Delete</a>";
 
-                              echo<<<query
-                               <tr>
-                                 <td>$i</td>
-                                 <td>$row[name]</td>
-                                 <td>$row[email]</td>
-                                 <td>$row[subject]</td>
-                                 <td>$row[message]</td>
-                                 <td>$row[date]</td>
-                                 <td>$seen</td>
-                                 
-                               </tr>
-                              query;
-                              $i++;
-                           }
+                                echo "
+                                <tr>
+                                    <td>$i</td>
+                                    <td>{$row['name']}</td>
+                                    <td>{$row['email']}</td>
+                                    <td>{$row['subject']}</td>
+                                    <td>{$row['message']}</td>
+                                    <td>{$row['date']}</td>
+                                    <td>$actions</td>
+                                </tr>";
 
-                        
-                        ?>
-                      
-                       
-                     </tbody>
-                     </table>
-   
+                                $i++;
+                            }
+                            ?>
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
-                 
-               </div>
             </div>
-         </div>
-      </div>
-   </div>
-    
+
+        </div>
+    </div>
+</div>
+
 </body>
-</html>   
+</html>
+   

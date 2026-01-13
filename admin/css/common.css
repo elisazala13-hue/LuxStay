@@ -55,10 +55,14 @@
             appearance: textfield;
         }
 
-        .custom-bg{
-            background-color: var(--teal);
-            border: 1px solid var(--teal);
+       .custom-bg{
+        background-color: #0d6efd; /* ose ngjyra që do */
+        color: white;
+        border: none;
         }
+
+
+
 
         .custom-bg:hover{
             background-color: var(--teal_hover);
