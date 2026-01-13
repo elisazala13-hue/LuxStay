@@ -1,15 +1,15 @@
 <?php
-   require_once $_SERVER['DOCUMENT_ROOT'] . '/LuxStay/admin/inc/db_config.php';
-
+   error_reporting(E_ALL);
+   ini_set('display_errors', 1);
+   
+   require_once('inc/db_config.php');
    require_once('inc/essentials.php');
 
    session_start();
    
-    if((isset($_SESSION['adminLogin']) && $_SESSION['adminLogin']==true))
+    if((isset($_SESSION['adminlogin']) && $_SESSION['adminlogin']==true))
         {
             redirect('users.php');
-       
-    
         }
 ?>
 
@@ -32,6 +32,9 @@
     </style>
 </head>
 <body class="bg-light">
+    <?php if(isset($db_error)): ?>
+        <div class="alert alert-danger m-3"><?php echo $db_error; ?></div>
+    <?php endif; ?>
     <div class="login-form text-center rounded bg-white shadow overflow-hidden">
         <form method="POST">
             <h4 class="bg-dark text-white py-3">ADMIN LOGIN PANEL</h4>
@@ -58,18 +61,17 @@
         
 
         $res = select($query,$values,"ss");
-        print_r($res);
-        if($res->num_rows==1){
-            echo"got user";
+        
+        if($res && $res->num_rows==1){
             $row=mysqli_fetch_assoc($res);
-            $_SESSION['adminLogin']=true;
+            $_SESSION['adminlogin']=true;
             $_SESSION['adminId']=$row['sr_no'];
             redirect('users.php');
             
         }
         else{
             alert('error' ,'Login failed-Invalid Credentials!');
-            }
+        }
         
     }
     ?>

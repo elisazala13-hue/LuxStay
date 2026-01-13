@@ -1,3 +1,7 @@
+<?php
+require __DIR__ . '/admin/inc/db_config.php';
+require __DIR__ . '/admin/inc/essentials.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -107,7 +111,17 @@
         alert('success', 'Mail sent!');
      }
      else{
-        alert('error','Server Down! Try again later.');
+        // Check for database errors
+        if(isset($GLOBALS['con'])) {
+            $error = mysqli_error($GLOBALS['con']);
+            if($error) {
+                alert('error', 'Error: ' . $error);
+            } else {
+                alert('error','Server Down! Try again later.');
+            }
+        } else {
+            alert('error','Database connection failed!');
+        }
      }
     }
 
