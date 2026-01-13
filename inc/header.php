@@ -1,5 +1,5 @@
 <!--Navigation Bar-->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white px-lg-3 py-lg-2 shadow-sm sticky-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-white px-lg-3 py-lg-2 shadow-sm sticky-top">
     <div class="container-fluid">
         <a class="navbar-brand me-5 fw-bold fs-3 h-font" href="index.php">LuxStay</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,7 +73,7 @@
     <div class="modal fade" id="registerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <form action="">
+                <form action="register-form">
                     <div class="modal-header">
                         <h5 class="modal-title d-flex align-items-center">
                             <i class="bi bi-person-lines-fill fs-3 me-2"></i>
@@ -86,33 +86,46 @@
                             <div class="row">
                                 <div class="col-md-6 ps-0 mb-3">
                                     <label class="form-label">Name</label>
-                                    <input type="text" class="form-control shadow-none">
+                                    <input  name="name" type="text" class="form-control shadow-none" required>
                                     <br>
-                                    <label class="form-label">Email</label>
-                                    <input type="email" class="form-control shadow-none">
+                                    <labe class="form-label">Email</label>
+                                    <input  name="email" type="email" class="form-control shadow-none" required>
                                 </div>
                                 <div class="col-md-6 ps-0 mb-3">
                                     <label class="form-label">Phone Number</label>
-                                    <input type="number" class="form-control shadow-none">
-                                    <br>
-                                    <label class="form-label">Date of Birth</label>
-                                    <input type="date" class="form-control shadow-none">
+                                    <input name="phonenum" type="number" class="form-control shadow-none" required>
                                 </div>
+                                
+                                <div class="col-md-6 p-0 mb-3">
+                                    <label class="form-label">Picture</label>
+                                    <input name="profile" type="file" accept=".jpg, .jpeg, .png, .webp" class="form-control shadow-none" required>
+                                </div>
+
                                 <div class="col-md-6 ps-0 mb-3">
-                                    <label class="form-label">Password</label>
-                                    <input type="password" class="form-control shadow-none">
-                                    <br>
-                                    <label class="form-label">Confirm Password</label>
-                                    <input type="password" class="form-control shadow-none">
+                                    <label class="form-label">Pincode</label>
+                                    <input name="pincode" type="number" class="form-control shadow-none" required>
+                                </div>
+                                
+                                <div class="col-md-6 p-0 mb-3">
+                                <label class="form-label">Date of birth</label>
+                                <input name="dob" type="date" class="form-control shadow-none" required>
+                            </div>
+
+                            <div class="col-md-6 ps-0 mb-3">
+                                <label class="form-label">Password</label>
+                                <input name="pass" type="password" class="form-control shadow-none" required>
+                            </div>
+
+                            <div class="col-md-6 p-0 mb-3">
+                                <label class="form-label">Confirm Password</label>
+                                 <input name="cpass" type="password" class="form-control shadow-none" required>
+                                </div>
+                                
+                                <div class="text-center my-1">
+                                    <button type="submit" class="btn btn-dark shadow-none">REGISTER</button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-dark shadow-none">REGISTER</button>
-                        </div>
-
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
-        </div>
-    </div>
