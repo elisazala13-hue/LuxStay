@@ -1,5 +1,4 @@
-<!-- fushat e regjistrimit jane vetem: name, email, phone num, date of birth, password-->
- <!-- DUHET SHTUAR PICTURE-->
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -69,79 +68,116 @@
       </div>
       <!--Rooms-->
       <div class="col-lg-9 col-md-12 px-4">
+      
       <?php
-       require('admin/inc/db_config.php');
-       require('admin/inc/essentials.php');
+require('admin/inc/db_config.php');
+require('admin/inc/essentials.php');
 
-        $room_res = select("SELECT * FROM `rooms` WHERE `status`=? AND `removed`=?",[1,0], 'ii');
 
-        while($room_data = mysqli_fetch_assoc($room_res)) {
+$room_res = mysqli_query($con, "SELECT * FROM rooms WHERE status = 1 AND removed = 0");
 
-          // Features
-          $fea_q = mysqli_query($con,"SELECT f.name FROM `features` f
-              INNER JOIN `room_features` rfea ON f.id = rfea.features_id
-              WHERE rfea.room_id = '{$room_data['id']}'");
+if(mysqli_num_rows($room_res) == 0) {
+    echo '<div class="alert alert-info text-center">No rooms available at the moment.</div>';
+}
 
-          $features_data = "";
-          while($fea_row = mysqli_fetch_assoc($fea_q)){
-              $features_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap'>{$fea_row['name']}</span> ";
-          }
-
-          // Facilities
-          $fac_q = mysqli_query($con,"SELECT f.name FROM `facilities` f
-              INNER JOIN `room_facilities` rfac ON f.id = rfac.facilities_id
-              WHERE rfac.room_id = '{$room_data['id']}'");
-
-          $facilities_data = "";
-          while($fac_row = mysqli_fetch_assoc($fac_q)){
-              $facilities_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap'>{$fac_row['name']}</span> ";
-          }
-
-          // Image
-          $img_q = mysqli_query($con,"SELECT * FROM `room_images`
-              WHERE `room_id`='{$room_data['id']}'
-              ORDER BY `id` ASC
-              LIMIT 1");
-
-          $room_thumb = ROOMS_IMG_PATH."default.jpg";
-          if(mysqli_num_rows($img_q) > 0){
-              $img_res = mysqli_fetch_assoc($img_q);
-              $room_thumb = ROOMS_IMG_PATH.$img_res['image'];
-          }
-
-          // HTML
-          echo <<<data
-          <div class="card mb-4 border-0 shadow">
-              <div class="row g-0 p-3 align-items-center">
-                  <div class="col-md-5 mb-lg-0 mb-3">
-                      <img src="{$room_thumb}" class="img-fluid rounded">
-                  </div>
-                  <div class="col-md-5 px-lg-3 px-md-3 px-0">
-                      <h5 class="mb-2">{$room_data['name']}</h5>
-                      <div class="features mb-0">
-                          <h6 class="mb-0">Features</h6>
-                          {$features_data}
-                      </div>
-                      <div class="facilities mb-0">
-                          <h6 class="mb-0">Facilities</h6>
-                          {$facilities_data}
-                      </div>
-                      <div class="guests mb-0">
-                          <h6 class="mb-0">Guests</h6>
-                          <span class='badge rounded-pill bg-light text-dark text-wrap'>{$room_data['adults']} Adults</span>
-                          <span class='badge rounded-pill bg-light text-dark text-wrap'>{$room_data['children']} Children</span>
-                      </div>
-                  </div>
-                  <div class="col-md-2 text-center">
-                      <h6 class="mb-4">{$room_data['price']}€ per night</h6>
-                      <a href="#" class="btn btn-sm btn-primary shadow-none mb-2 w-100">Book Now</a>
-                  </div>
-              </div>
-          </div>
-          data;
-      }
-
-      ?>
+while($room_data = mysqli_fetch_assoc($room_res)) {
+    $room_id = $room_data['id'];
+    
+    $features_data = "";
+    $fea_q = mysqli_query($con, "SELECT f.name FROM features f
+        INNER JOIN room_features rfea ON f.id = rfea.features_id
+        WHERE rfea.rm_id = $room_id");
+    
+    if($fea_q && mysqli_num_rows($fea_q) > 0) {
+        while($fea_row = mysqli_fetch_assoc($fea_q)) {
+            $features_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>{$fea_row['name']}</span>";
+        }
+    }
+    
+    $facilities_data = "";
+    $fac_q = mysqli_query($con, "SELECT f.name FROM facilities f
+        INNER JOIN room_facilities rfac ON f.id = rfac.facilities_id
+        WHERE rfac.room_id = $room_id");
+    
+    if($fac_q && mysqli_num_rows($fac_q) > 0) {
+        while($fac_row = mysqli_fetch_assoc($fac_q)) {
+            $facilities_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>{$fac_row['name']}</span>";
+        }
+    }
+    
+    
+    if(!empty($room_data['images'])) {
+        $image_path = ROOMS_IMG_PATH . $room_data['images'];
+        $room_thumb = $image_path;
+    }
+    
+    ?>
+    <div class="card mb-4 border-0 shadow">
+        <div class="row g-0 p-3 align-items-center">
+  
+            <div class="col-md-5 mb-lg-0 mb-3">
+                <img src="<?= $room_thumb ?>" 
+                     class="img-fluid rounded" 
+                     style="height: 250px; width: 100%; object-fit: cover;"
+                     alt="<?= htmlspecialchars($room_data['name']) ?>"
+                     onerror="this.src='<?= ROOMS_IMG_PATH ?>default.jpg'">
+            </div>
+            
+            <div class="col-md-5 px-lg-3 px-md-3 px-0">
+                <h5 class="mb-2"><?= htmlspecialchars($room_data['name']) ?></h5>
+                <p class="mb-2 text-muted">
+                    <i class="bi bi-rulers"></i> <?= $room_data['area'] ?> m²
+                </p>
+                
+                <!-- Features -->
+                <?php if(!empty($features_data)): ?>
+                <div class="features mb-3">
+                    <h6 class="mb-1"><i class="bi bi-stars"></i> Features</h6>
+                    <div><?= $features_data ?></div>
+                </div>
+                <?php endif; ?>
+                
+                <!-- Facilities -->
+                <?php if(!empty($facilities_data)): ?>
+                <div class="facilities mb-3">
+                    <h6 class="mb-1"><i class="bi bi-building"></i> Facilities</h6>
+                    <div><?= $facilities_data ?></div>
+                </div>
+                <?php endif; ?>
+                
+                <!-- Guests -->
+                <div class="guests mb-3">
+                    <h6 class="mb-1"><i class="bi bi-people"></i> Guests</h6>
+                    <span class='badge rounded-pill bg-light text-dark text-wrap me-1'>
+                        <i class="bi bi-person"></i> <?= $room_data['adults'] ?> Adults
+                    </span>
+                    <span class='badge rounded-pill bg-light text-dark text-wrap'>
+                        <i class="bi bi-person-arms-up"></i> <?= $room_data['children'] ?> Children
+                    </span>
+                </div>
+                
+                <!-- Quantity -->
+                <div class="availability mb-3">
+                    <span class='badge bg-success text-wrap'>
+                        <i class="bi bi-check-circle"></i> <?= $room_data['quantity'] ?> Rooms Available
+                    </span>
+                </div>
+            </div>
+            
+            <!-- ÇMIMI & BUTONI -->
+            <div class="col-md-2 text-center">
+                <h6 class="mb-4 text-primary">
+                    <i class="bi bi-currency-euro"></i> <?= $room_data['price'] ?> per night
+                </h6>
+                <a href="room_details.php?id=<?= $room_id ?>" class="btn btn-sm btn-primary shadow-none mb-2 w-100">
+                    <i class="bi bi-calendar-check"></i> Book Now
+                </a>
+            </div>
+        </div>
+    </div>
+    <?php
+}
+?>
 
 
        
