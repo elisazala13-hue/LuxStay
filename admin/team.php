@@ -153,7 +153,7 @@ function add_member(){
 
   
     xhr.onload = function(){
-        console.log('RESPONSE:', this.responseText);//DEBUG
+        console.log('RESPONSE:', this.responseText);
          var myModal = document.getElementById('team-s');
          var modal = bootstrap.Modal.getInstance(myModal);
          modal.hide();
@@ -175,9 +175,6 @@ function add_member(){
          }
     }
 
-  
-
-  // send data
   xhr.send(data);
 
 

@@ -52,7 +52,7 @@ global $con;
             </div>
 
           <!--Add room Modal -->
-            <div class="modal fade" id="add-room" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1" aria-hidden="true">
+            <div class="modal" id="add-room" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1">
             <div class="modal-dialog">
                <form id="add_room_form" autocomplete="off" enctype="multipart/form-data" method="post">
                 <div class="modal-content">
@@ -128,9 +128,9 @@ global $con;
             </div>
 
         <!--Edit room Modal -->
-            <div class="modal fade" id="edit-room" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1">
+            <div class="modal" id="edit-room" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1">
             <div class="modal-dialog">
-                <div class="modal fade" id="edit_room_form" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1"></div>
+                <form id="edit_room_form" autocomplete="off" enctype="multipart/form-data" method="post">
                 <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Edit room</h5>
@@ -206,8 +206,6 @@ global $con;
                 </form>
             </div>
             </div>
-
-       
          </div>
       </div>
    </div>
@@ -220,6 +218,7 @@ global $con;
             e.preventDefault();
             add_room();
         })
+        
         function add_room() {
             let form = document.getElementById('add_room_form');
             let data = new FormData(form);
@@ -246,6 +245,7 @@ global $con;
             xhr.send(data);
         }
 
+        //eshte sakte
         function get_all_rooms(){
                 let xhr = new XMLHttpRequest();
                 xhr.open("POST", "ajax/rooms.php", true);
@@ -261,6 +261,7 @@ global $con;
             get_all_rooms();
         }
 
+        //eshte sakte
         function toggle_status(id,val){
                 let xhr = new XMLHttpRequest();
                 xhr.open("POST", "ajax/rooms.php", true);
@@ -276,88 +277,106 @@ global $con;
                 }
                 xhr.send('toggle_status='+id+'&value='+val);
             }
-    
-           
-        function edit_room(id){
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', "ajax/rooms.php", true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        xhr.onload = function() {
-            try {
-                let data = JSON.parse(this.responseText);
-                
-                if(data.error) {
-                    alert('error', data.error);
-                    return;
-                }
-                
-                if(data.success === false) {
-                    alert('error', 'Failed to get room data');
-                    return;
-                }
-                
-                edit_room_form.elements['name'].value = data.roomdata.name;
-                edit_room_form.elements['area'].value = data.roomdata.area;
-                edit_room_form.elements['price'].value = data.roomdata.price;
-                edit_room_form.elements['quantity'].value = data.roomdata.quantity;
-                edit_room_form.elements['adults'].value = data.roomdata.adults;
-                edit_room_form.elements['children'].value = data.roomdata.children;
-                edit_room_form.elements['room_id'].value = data.roomdata.id;
-            
-                document.querySelectorAll('input[name="features[]"]').forEach(el => {
-                    el.checked = data.features.includes(parseInt(el.value));
-                });
-                
-                document.querySelectorAll('input[name="facilities[]"]').forEach(el => {
-                    el.checked = data.facilities.includes(parseInt(el.value));
-                });
-                
-                var myModal = new bootstrap.Modal(document.getElementById('edit-room'));
-                myModal.show();  
-                
-            } catch(e) {
-                console.error("Error:", e);
-                console.error("Response:", this.responseText);
-                alert('error', 'Invalid response from server');
-            }
-        }
-
-        xhr.send('get_room=' + id); 
-    }
-
+        
+        //fotoja, fac, fea nuk funks sakte
         let edit_room_form = document.getElementById('edit_room_form');
-
         edit_room_form.addEventListener('submit', function(e){
             e.preventDefault();
-            
-            let data = new FormData(this);
-            data.append('edit_room', '');
-            
+            add_edit_room();
+        });
+        
+        function edit_room(id){
+            let xhr= new XMLHttpRequest();
+            xhr.open('POST', "ajax/rooms.php", true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.onload = function() {        
+                    let response = JSON.parse(this.responseText);
+                    if (response.success) {
+                        let data = response.roomdata;                         
+                        if (data && data.name) {
+                            edit_room_form.elements['name'].value = data.name;
+                            edit_room_form.elements['area'].value = data.area;
+                            edit_room_form.elements['price'].value = data.price;
+                            edit_room_form.elements['quantity'].value = data.quantity;
+                            edit_room_form.elements['adults'].value = data.adults;
+                            edit_room_form.elements['children'].value = data.children;
+                            edit_room_form.elements['room_id'].value = data.id;
+                            
+                            let featureCheckboxes = edit_room_form.querySelectorAll('input[name="features[]"]');
+                            featureCheckboxes.forEach(el => {
+                                el.checked = response.features.includes(parseInt(el.value));
+                            });
+                            
+                            let facilityCheckboxes = edit_room_form.querySelectorAll('input[name="facilities[]"]');
+                            facilityCheckboxes.forEach(el => {
+                                el.checked = response.facilities.includes(parseInt(el.value));
+                            });
+
+                            var myModal = new bootstrap.Modal(document.getElementById('edit-room'));
+                            myModal.show();
+                        } else {
+                            alert('error', 'Room data not found!');
+                        }
+                    } else {
+                        alert('error', 'Failed to get room data!');
+                    }
+                
+            }
+
+            xhr.send('get_room=' + id);
+        }
+        
+        function add_edit_room() {
             let xhr = new XMLHttpRequest();
             xhr.open('POST', "ajax/rooms.php", true);
-            
-            xhr.onload = function() {
-                if(this.responseText == 1) {
-                    alert('success', 'Room updated successfully!');
-                    get_all_rooms();
-                    var modal = bootstrap.Modal.getInstance(document.getElementById('edit-room'));
-                    modal.hide();
-                } 
-                else if(this.responseText == 'missing_field') {
-                    alert('error', 'Please fill all required fields!');
-                }
-                else if(this.responseText == 'update_failed') {
-                    alert('error', 'Failed to update room!');
-                }
-                else {
-                    alert('error', 'Server error: ' + this.responseText);
+            let form = document.getElementById('edit_room_form');
+            let data = new FormData(form);
+
+            const formElements = form.elements;
+            for (let element of formElements) {
+                if (element.name && element.type !== 'checkbox') {
+                    data.append(element.name, element.value);
                 }
             }
-            
-            xhr.send(data);
-        });
 
+            let features = [];
+            let featureCheckboxes = form.querySelectorAll('input[name="features[]"]');
+            featureCheckboxes.forEach((checkbox, index) => {
+            if (checkbox.checked) {
+                features.push(checkbox.value);
+            }
+            });
+                
+            let facilities = [];
+            let facilityCheckboxes = form.querySelectorAll('input[name="facilities[]"]');
+            facilityCheckboxes.forEach((checkbox, index) => {
+            if (checkbox.checked) {
+                facilities.push(checkbox.value);}});        
+                
+            data.append('features', JSON.stringify(features));
+            data.append('facilities', JSON.stringify(facilities));
+            data.append('edit_room', '');
+
+            xhr.onload = function () {
+                    if (this.responseText == 1) {
+                        alert('success', 'Room updated successfully!');
+                        get_all_rooms();
+                        var modal = bootstrap.Modal.getInstance(document.getElementById('edit-room'));
+                        if(modal) modal.hide();
+                        
+                    } else if (this.responseText == 0) {
+                        alert('error', 'Update failed!');
+                    } else {
+                        alert('error', 'Error: ' + this.responseText);
+                    }
+                };
+
+            xhr.send(data);
+            }
+
+        //eshte sakte
         function rem_room(room_id) {
         if(confirm("Are you sure, you want to delete this room?")) {
             let xhr = new XMLHttpRequest();
@@ -365,7 +384,6 @@ global $con;
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             
             xhr.onload = function() {
-                console.log("Delete response:", this.responseText); // Debug
                 if(this.responseText == 1) {
                     alert('success', 'Room Removed!');
                     get_all_rooms();

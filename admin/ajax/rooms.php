@@ -13,7 +13,7 @@ if (isset($_POST['add_room'])) {
 
     $image_name = '';
     if(isset($_FILES['images']) && $_FILES['images']['error'] == 0) {
-        $upload_result = uploadImage($_FILES['images'], ROOMS_FOLDER);
+        $upload_result = uploadImageRooms($_FILES['images'], ROOMS_FOLDER);
         
         if($upload_result == 'inv_img') {
             echo 'inv_img';
@@ -69,7 +69,7 @@ if (isset($_POST['add_room'])) {
     }
 
     if(!empty($features)) {
-        $q3 = "INSERT INTO `room_features` (`rm_id`, `features_id`) VALUES (?, ?)"; 
+        $q3 = "INSERT INTO `room_features` (`room_id`, `features_id`) VALUES (?, ?)"; 
         if($stmt = mysqli_prepare($con, $q3)) {
             foreach($features as $f) {
                 $f = (int)$f; 
@@ -103,8 +103,12 @@ if (isset($_POST['get_all_rooms'])) {
         
         $image_html = '';
         if(!empty($row['images'])) {
-            $image_path = ROOMS_IMG_PATH . $row['images'];
-            $image_html = "<img src='$image_path' width='50' height='50' class='rounded-circle me-2'>";
+            $images = explode(',', $row['images']);
+            if(!empty($images[0])) {
+                $first_image = trim($images[0]);
+                $image_path = ROOMS_IMG_PATH . $first_image;
+                $image_html = "<img src='$image_path' width='50' height='50' class='rounded-circle me-2' style='object-fit: cover;'>";
+            }
         }
 
         if($row['status'] == 1){
@@ -116,7 +120,10 @@ if (isset($_POST['get_all_rooms'])) {
         $data .= "
             <tr class='align-middle'>
                 <td>$i</td>
-                <td>$image_html $row[name]</td>
+                <td>
+                    $image_html 
+                    <strong>$row[name]</strong>
+                </td>
                 <td>$row[area] m<sup>2</sup></td>
                 <td>
                     <span class='badge rounded-pill bg-light text-dark'>
@@ -143,7 +150,16 @@ if (isset($_POST['get_all_rooms'])) {
         $i++;
     }
 
-    echo $data;
+    // Debug: shiko strukturën e rooms
+    if(empty($data)) {
+        echo "No rooms found or error. Structure of rooms table:<br>";
+        $res_test = mysqli_query($con, "DESCRIBE rooms");
+        while($col = mysqli_fetch_assoc($res_test)) {
+            echo $col['Field'] . " - " . $col['Type'] . "<br>";
+        }
+    } else {
+        echo $data;
+    }
     exit;
 }
 
@@ -165,22 +181,11 @@ if (isset($_POST['get_room'])) {
     $con = $GLOBALS['con'];
     $room_id = (int)$_POST['get_room'];
     
-    $res1 = mysqli_query($con, "SELECT * FROM `rooms` WHERE `id` = $room_id");
-    
-    if(!$res1) {
-        echo json_encode(["error" => "Failed to fetch room data: " . mysqli_error($con)]);
-        exit;
-    }
-    
-    if(mysqli_num_rows($res1) == 0) {
-        echo json_encode(["error" => "Room not found"]);
-        exit;
-    }
-    
+    $res1 = mysqli_query($con, "SELECT * FROM `rooms` WHERE `id` = $room_id");    
     $roomdata = mysqli_fetch_assoc($res1);
     
     $features = [];
-    $res2 = mysqli_query($con, "SELECT `features_id` FROM `room_features` WHERE `rm_id` = $room_id");
+    $res2 = mysqli_query($con, "SELECT `features_id` FROM `room_features` WHERE `room_id` = $room_id");
     
     if($res2) {
         while ($row = mysqli_fetch_assoc($res2)) {
@@ -210,26 +215,48 @@ if (isset($_POST['get_room'])) {
 
 if(isset($_POST['edit_room'])) {
     $con = $GLOBALS['con'];
+
+    $features = [];
+    $facilities = [];
     
-    $features = isset($_POST['features']) ? (array)$_POST['features'] : [];
-    $facilities = isset($_POST['facilities']) ? (array)$_POST['facilities'] : [];
+    if(isset($_POST['features'])) {
+        if(is_string($_POST['features'])) {
+            $features = json_decode($_POST['features'], true);
+            if(json_last_error() !== JSON_ERROR_NONE) {
+                $features = [];
+            }
+        } elseif(is_array($_POST['features'])) {
+            $features = $_POST['features'];
+        }
+    }
+    
+    if(isset($_POST['facilities'])) {
+        if(is_string($_POST['facilities'])) {
+            $facilities = json_decode($_POST['facilities'], true);
+            if(json_last_error() !== JSON_ERROR_NONE) {
+                $facilities = [];
+            }
+        } elseif(is_array($_POST['facilities'])) {
+            $facilities = $_POST['facilities'];
+        }
+    }
     
     $features = filteration($features);
     $facilities = filteration($facilities);
     $frm_data = filteration($_POST);
     
-    if(empty($frm_data['room_id'])) {
-        echo "missing_room_id";
-        exit;
-    }
-    
-    $room_id = $frm_data['room_id'];
+    $room_id = isset($frm_data['room_id']) ? (int)$frm_data['room_id'] : 0;
     $current_image = $frm_data['current_images'] ?? '';
     $flag = 0;
     
+    if($room_id == 0) {
+        echo "invalid_room_id";
+        exit;
+    }
+
     $new_image = $current_image;
     if(isset($_FILES['images']) && $_FILES['images']['error'] == 0) {
-        $upload_result = uploadImage($_FILES['images'], ROOMS_FOLDER);
+        $upload_result = uploadImageRooms($_FILES['images'], ROOMS_FOLDER);
         
         if($upload_result == 'inv_img') {
             echo 'inv_img';
@@ -242,12 +269,12 @@ if(isset($_POST['edit_room'])) {
             exit;
         } else {
             if(!empty($current_image)) {
-                deleteImage($current_image, ROOMS_FOLDER);
+                deleteImage($current_image, 'rooms/');
             }
             $new_image = $upload_result;
         }
     }
- 
+
     $q1 = "UPDATE `rooms` 
            SET `name` = ?, 
                `area` = ?, 
@@ -259,13 +286,13 @@ if(isset($_POST['edit_room'])) {
            WHERE `id` = ?";
     
     $values1 = [
-        $frm_data['name'], 
-        $frm_data['area'], 
-        $frm_data['price'], 
-        $frm_data['quantity'], 
-        $frm_data['adults'], 
-        $frm_data['children'],
-        $new_image, 
+        $frm_data['name'] ?? '',
+        $frm_data['area'] ?? 0,
+        $frm_data['price'] ?? 0,
+        $frm_data['quantity'] ?? 1,
+        $frm_data['adults'] ?? 1,
+        $frm_data['children'] ?? 0,
+        $new_image,
         $room_id
     ];
     
@@ -277,54 +304,51 @@ if(isset($_POST['edit_room'])) {
         echo "update_failed:room_details";
         exit;
     }
-
-    $del_features = delete(
-        "DELETE FROM `room_features` WHERE `rm_id` = ?", 
+    
+    delete(
+        "DELETE FROM `room_features` WHERE `room_id` = ?", 
         [$room_id], 
         'i'
     );
     
-    $del_facilities = delete(
+    delete(
         "DELETE FROM `room_facilities` WHERE `room_id` = ?", 
         [$room_id], 
         'i'
     );
-
+ 
     if(!empty($facilities)) {
+        mysqli_query($con, "SET FOREIGN_KEY_CHECKS = 0");
+        
         foreach($facilities as $f) {
             $f = (int)$f;
-            $q2 = "INSERT INTO `room_facilities`(`room_id`, `facilities_id`) VALUES (?, ?)";
-            
-            $insert_facility = insert($q2, [$room_id, $f], 'ii');
-            
-            if(!$insert_facility) {
-                $flag = 0;
-                echo "insert_failed:facilities";
-                exit;
-            }
+            $sql = "INSERT IGNORE INTO room_facilities (room_id, facilities_id) VALUES ($room_id, $f)";
+            mysqli_query($con, $sql);
         }
+        
+        mysqli_query($con, "SET FOREIGN_KEY_CHECKS = 1");
     }
-
+    
     if(!empty($features)) {
+        $room_col = 'room_id';
+        $result = mysqli_query($con, "SHOW COLUMNS FROM room_features LIKE 'rm_id'");
+        if(mysqli_num_rows($result) > 0) {
+            $room_col = 'room_id';
+        }
+        
         foreach($features as $f) {
             $f = (int)$f;
-            $q3 = "INSERT INTO `room_features`(`rm_id`, `features_id`) VALUES (?, ?)"; 
-            
-            $insert_feature = insert($q3, [$room_id, $f], 'ii');
-            
-            if(!$insert_feature) {
-                $flag = 0;
-                echo "insert_failed:features";
-                exit;
-            }
+            $sql = "INSERT IGNORE INTO room_features ($room_col, features_id) VALUES ($room_id, $f)";
+            mysqli_query($con, $sql);
         }
     }
-
+    
     if($flag) {
         echo 1;
     } else {
         echo 0;
     }
+    
     exit;
 }
 
@@ -342,7 +366,7 @@ if(isset($_POST['rem_room'])) {
         }
     }
     
-    $res1 = delete("DELETE FROM `room_features` WHERE `rm_id`=?", [$room_id], 'i');
+    $res1 = delete("DELETE FROM `room_features` WHERE `room_id`=?", [$room_id], 'i');
     $res2 = delete("DELETE FROM `room_facilities` WHERE `room_id`=?", [$room_id], 'i');
     $res3 = delete("DELETE FROM `rooms` WHERE `id`=?", [$room_id], 'i'); // DELETE direkt, jo UPDATE
     
@@ -353,7 +377,6 @@ if(isset($_POST['rem_room'])) {
     }
     exit;
 }
-
 
 ?>
 
