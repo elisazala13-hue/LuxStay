@@ -74,7 +74,7 @@ require('admin/inc/db_config.php');
 require('admin/inc/essentials.php');
 
 
-$room_res = mysqli_query($con, "SELECT * FROM rooms WHERE status = 1 AND removed = 0");
+$room_res = mysqli_query($con, "SELECT * FROM rooms WHERE status = 1");
 
 if(mysqli_num_rows($room_res) == 0) {
     echo '<div class="alert alert-info text-center">No rooms available at the moment.</div>';
@@ -86,7 +86,7 @@ while($room_data = mysqli_fetch_assoc($room_res)) {
     $features_data = "";
     $fea_q = mysqli_query($con, "SELECT f.name FROM features f
         INNER JOIN room_features rfea ON f.id = rfea.features_id
-        WHERE rfea.rm_id = $room_id");
+        WHERE rfea.room_id = $room_id");
     
     if($fea_q && mysqli_num_rows($fea_q) > 0) {
         while($fea_row = mysqli_fetch_assoc($fea_q)) {

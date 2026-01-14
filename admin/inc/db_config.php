@@ -100,11 +100,11 @@ function delete($sql,$values,$datatypes)
         }
         else{
             mysqli_stmt_close($stmt);
-            die("Query can not be executed - Delete");
+            return false;
         }
     }
     else{
-        die("Query can not be prepared - Delete");
+        return false;
     }
 }
 

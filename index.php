@@ -1,6 +1,3 @@
-<!-- fushat e regjistrimit jane vetem: name, email, phone num, date of birth, password-->
-<!-- stilizimet: bootstrap, swiper.js-->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,18 +28,9 @@
 
 <?php 
 require('inc/header.php');
+require('admin/inc/db_config.php');  
+require('admin/inc/essentials.php'); 
 
-// KRIJO DATABASE CONNECTION MANUALISHT
-$con = mysqli_connect("localhost", "root", "", "hoteli");
-
-if(!$con) {
-echo "<div class='alert alert-danger m-3'>Database connection failed: " . mysqli_connect_error() . "</div>";
-    require('admin/inc/essentials.php');
-    $no_db = true;
-} else {
-    require('admin/inc/essentials.php');
-    $no_db = false;
-}
 ?>
 
 <!--Picture Crousel-->
@@ -117,8 +105,7 @@ echo "<div class='alert alert-danger m-3'>Database connection failed: " . mysqli
 <div class="container">
     <div class="row">
         <?php
-        if(!$no_db && $con) {
-            $query = "SELECT * FROM `rooms` WHERE `status` = 1 AND `removed` = 0 ORDER BY `id` DESC LIMIT 3";
+            $query = "SELECT * FROM `rooms` WHERE `status` = 1 ORDER BY `id` DESC LIMIT 3";
             $room_res = mysqli_query($con, $query);
             
             if(!$room_res) {
@@ -151,9 +138,8 @@ echo "<div class='alert alert-danger m-3'>Database connection failed: " . mysqli
                         }
                     }
                     
-                    if(!empty($room_data['image'])) {
-                        $room_thumb = "admin/images/rooms/" . $room_data['image'];
-                    }
+                        $room_thumb = "images/rooms/" . $room_data['images'];
+                    
                     
             
                     ?>
@@ -161,8 +147,7 @@ echo "<div class='alert alert-danger m-3'>Database connection failed: " . mysqli
                         <div class="card h-100 border-0 shadow">
                             <div class="p-3">
                                 <img src="<?php echo $room_thumb; ?>" class="img-fluid rounded mb-3" style="height: 200px; object-fit: cover;" 
-                                     alt="<?php echo htmlspecialchars($room_data['name']); ?>"
-                                     onerror="this.src='images/default.jpg'">
+                                     alt="<?php echo htmlspecialchars($room_data['name']); ?>">
                                 <h5 class="mb-2"><?php echo htmlspecialchars($room_data['name']); ?></h5>
                                 
                                 <?php if(!empty($features_data)): ?>
@@ -200,9 +185,6 @@ echo "<div class='alert alert-danger m-3'>Database connection failed: " . mysqli
                 <?php
                 }
             }
-        } else {
-            echo "<div class='col-12 text-center'><p>Rooms information currently unavailable. Please check back later.</p></div>";
-        }
         ?>
         
         
