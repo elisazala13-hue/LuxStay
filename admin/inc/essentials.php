@@ -7,7 +7,7 @@ define("UPLOAD_IMAGE_PATH", $_SERVER['DOCUMENT_ROOT'] . "/LuxStay/images/");
 define("ABOUT_FOLDER", "about/");
 define("USERS_FOLDER","users/");
 
-define('SENDGRID_API_KEY',"***REMOVED***");
+define('SENDGRID_API_KEY',"");
 
 
 function adminlogin()
