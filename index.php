@@ -104,8 +104,8 @@ require('inc/header.php');
     <div class="row">
         <?php
         
-            require('admin/inc/db_config.php');
-            require('admin/inc/essentials.php');
+            require_once('admin/inc/db_config.php');
+            require_once('admin/inc/essentials.php');
 
             $isLoggedIn = false;
             if(isset($_SESSION['login']) && $_SESSION['login'] == true) {
@@ -206,10 +206,6 @@ require('inc/header.php');
     </div>
 </div>
 
-
-
-
-
 <!--Our Facilities-->   
     <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">OUR FACILITIES</h2>
     <div class="container">
@@ -232,68 +228,6 @@ require('inc/header.php');
             </div>
         </div>
     </div>      
-
-<!--Reviews-->   
-    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">REVIEWS</h2>
-    <div class="container mt-5">
-        <div class="swiper swiper-ratings">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide bg-white p-4">
-                    <h6>Alketa Qorri</h6>
-                    <p>Qëndrim shumë i këndshëm. Dhoma ishte 
-                        e pastër, e rregullt dhe shumë komode. 
-                        Vendndodhja perfekte për të lëvizur në qytet. 
-                        Do të kthehem përsëri. </p>
-                    <div class="rating mb-4">
-                                <h6 class="mb-1">Rating</h6>
-                                <span class="badge rounded-pill bg-light">
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                </span>
-                    </div>
-                </div>
-                <div class="swiper-slide bg-white p-4">
-                    <h6>Erald Balliu</h6>
-                    <p>Hotel i qetë dhe modern. Stafi 
-                        shumë i sjellshëm dhe gjithmonë 
-                        i gatshëm për ndihmë. Raport shumë 
-                        i mirë cilësi-çmim.</p>
-                    <div class="rating mb-4">
-                                <h6 class="mb-1">Rating</h6>
-                                <span class="badge rounded-pill bg-light">
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                </span>
-                    </div>
-                </div>
-                <div class="swiper-slide bg-white p-4">
-                    <h6>Alban Toska</h6>
-                    <p>Përvojë shumë pozitive. Ambient 
-                        i pastër, krevat i rehatshëm dhe 
-                        zonë shumë e mirë pranë kafeneve 
-                        dhe restoranteve. E rekomandoj pa 
-                        hezitim. </p>
-                    <div class="rating mb-4">
-                                <h6 class="mb-1">Rating</h6>
-                                <span class="badge rounded-pill bg-light">
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                </span>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-pagination"></div>
-        </div>
-  </div>
 
 <!--Reach Us-->   
     <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">REACH US</h2>
