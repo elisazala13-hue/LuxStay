@@ -5,6 +5,10 @@ define("SITE_URL", "http://127.0.0.1/LuxStay/");
 define("ABOUT_IMG_PATH", SITE_URL . "images/about/");
 define("UPLOAD_IMAGE_PATH", $_SERVER['DOCUMENT_ROOT'] . "/LuxStay/images/");
 define("ABOUT_FOLDER", "about/");
+define("USERS_FOLDER","users/");
+
+define('SENDGRID_API_KEY',"");
+
 
 function adminlogin()
 {
@@ -53,6 +57,48 @@ function uploadImage($image,$folder)
             return 'upd_failed';
         }
     }
+}
+function uploadUserImage($image)
+{
+    $valid_mime = ['image/jpeg', 'image/png', 'image/webp'];
+    $img_mime = $image['type'];
+
+    if (!in_array($img_mime, $valid_mime)) {
+        return 'inv_img';
+    }
+
+    $ext = strtolower(pathinfo($image['name'], PATHINFO_EXTENSION));
+    $rname = 'IMG_' . random_int(11111, 99999) . '.' . $ext; // keep original extension
+    $img_path = UPLOAD_IMAGE_PATH . USERS_FOLDER . $rname;
+
+    // Make sure GD functions exist
+    if (!function_exists('imagecreatefromjpeg')) return 'gd_missing';
+
+    // Load image based on type
+    switch ($ext) {
+        case 'png':
+            if (!function_exists('imagecreatefrompng')) return 'gd_missing';
+            $img = imagecreatefrompng($image['tmp_name']);
+            break;
+        case 'webp':
+            if (!function_exists('imagecreatefromwebp')) return 'gd_missing';
+            $img = imagecreatefromwebp($image['tmp_name']);
+            break;
+        case 'jpg':
+        case 'jpeg':
+            $img = imagecreatefromjpeg($image['tmp_name']);
+            break;
+        default:
+            return 'inv_img';
+    }
+
+    if (!$img) return 'upd_failed';
+
+    // Save as JPEG to reduce size, quality 75
+    $save_result = imagejpeg($img, $img_path, 75);
+    imagedestroy($img); // free memory
+
+    return $save_result ? $rname : 'upd_failed';
 }
 
 

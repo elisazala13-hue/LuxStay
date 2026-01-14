@@ -21,10 +21,10 @@
             </li>
         </ul>
         <div class="d-flex">
-            <button type="button" class="btn btn-outlin-dark shadow-none me-lg-2 me-3" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <button type="button" class="btn btn-outline-dark shadow-none me-lg-2 me-3" data-bs-toggle="modal" data-bs-target="#loginModal">
             Login
             </button>
-            <button type="button" class="btn btn-outlin-dark shadow-none me-lg-2 me-3" data-bs-toggle="modal" data-bs-target="#registerModal">
+            <button type="button" class="btn btn-outline-dark shadow-none me-lg-2 me-3" data-bs-toggle="modal" data-bs-target="#registerModal">
             Register
             </button>
         </div>
@@ -69,50 +69,64 @@
         </div>
     </div>
 
-<!--Register Button-->
-    <div class="modal fade" id="registerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <form action="">
-                    <div class="modal-header">
-                        <h5 class="modal-title d-flex align-items-center">
-                            <i class="bi bi-person-lines-fill fs-3 me-2"></i>
-                            User Registration</h5>
-                        <button type="reser" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap lh-base">Note: Your details must match your Id that will be required during check-in.</span>
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-md-6 ps-0 mb-3">
-                                    <label class="form-label">Name</label>
-                                    <input type="text" class="form-control shadow-none">
-                                    <br>
-                                    <label class="form-label">Email</label>
-                                    <input type="email" class="form-control shadow-none">
-                                </div>
-                                <div class="col-md-6 ps-0 mb-3">
-                                    <label class="form-label">Phone Number</label>
-                                    <input type="number" class="form-control shadow-none">
-                                    <br>
-                                    <label class="form-label">Date of Birth</label>
-                                    <input type="date" class="form-control shadow-none">
-                                </div>
-                                <div class="col-md-6 ps-0 mb-3">
-                                    <label class="form-label">Password</label>
-                                    <input type="password" class="form-control shadow-none">
-                                    <br>
-                                    <label class="form-label">Confirm Password</label>
-                                    <input type="password" class="form-control shadow-none">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-dark shadow-none">REGISTER</button>
-                        </div>
+<div class="modal fade" id="registerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="register-form" method="POST" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title d-flex align-items-center">
+                        <i class="bi bi-person-lines-fill fs-3 me-2"></i>
+                        User Registration
+                    </h5>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                         <div class="col-md-6 ps-0 mb-3">
+                                <label class="form-label">Name</label>
+                                <input type="text" name="name" class="form-control shadow-none" required>
 
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" class="form-control shadow-none" required>
+                            </div>
+
+                            <div class="col-md-6 ps-0 mb-3">
+                                <label class="form-label">Phone Number</label>
+                                <input type="number" name="phonenum" class="form-control shadow-none">
+
+                                <label class="form-label">Date of Birth</label>
+                                <input type="date" name="dob" class="form-control shadow-none">
+                            </div>
+
+                            <div class="col-md-6 ps-0 mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" name="pass" class="form-control shadow-none" required>
+
+                                <label class="form-label">Confirm Password</label>
+                                <input type="password" name="cpass" class="form-control shadow-none" required>
+                            </div>
+
+                            <div class="col-md-6 ps-0 mb-3">
+                                <label class="form-label">Address</label>
+                                <textarea name="address" class="form-control shadow-none" rows="2"></textarea>
+
+                                <label class="form-label">Pincode</label>
+                                <input type="text" name="pincode" class="form-control shadow-none">
+
+                                <label class="form-label">Profile Picture</label>
+                                <input type="file" name="profile" class="form-control shadow-none" accept="image/*" required>
+                            </div>
+
+                        </div>
                     </div>
-                </form>
-            </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-dark shadow-none">REGISTER</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
