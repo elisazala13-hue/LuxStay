@@ -28,8 +28,6 @@
 
 <?php 
 require('inc/header.php');
-require('admin/inc/db_config.php');  
-require('admin/inc/essentials.php'); 
 
 ?>
 
@@ -105,7 +103,16 @@ require('admin/inc/essentials.php');
 <div class="container">
     <div class="row">
         <?php
-            $query = "SELECT * FROM `rooms` WHERE `status` = 1 ORDER BY `id` DESC LIMIT 3";
+        
+            require('admin/inc/db_config.php');
+            require('admin/inc/essentials.php');
+
+            $isLoggedIn = false;
+            if(isset($_SESSION['login']) && $_SESSION['login'] == true) {
+                $isLoggedIn = true;
+            }
+
+            $query = "SELECT * FROM `rooms` WHERE `status` = 1 ORDER BY `id` ASC LIMIT 3";
             $room_res = mysqli_query($con, $query);
             
             if(!$room_res) {
@@ -138,10 +145,7 @@ require('admin/inc/essentials.php');
                         }
                     }
                     
-                        $room_thumb = "images/rooms/" . $room_data['images'];
-                    
-                    
-            
+                    $room_thumb = "images/rooms/" . $room_data['images'];
                     ?>
                     <div class="col-lg-4 col-md-6 mb-4">
                         <div class="card h-100 border-0 shadow">
@@ -176,23 +180,35 @@ require('admin/inc/essentials.php');
                                 
                                 <h6 class="mb-3"><?php echo number_format($room_data['price'], 2); ?>€ per night</h6>
                                 
-                                <a href="room_details.php?id=<?php echo $room_data['id']; ?>" class="btn btn-sm btn-primary shadow-none w-100">
-                                    Book Now
-                            </a>
+                                <?php if($isLoggedIn): ?>
+                                    <a href="confirm_booking.php?id=<?php echo $room_data['id']; ?>" 
+                                    class="btn btn-sm btn-primary shadow-none w-100">
+                                        Book Now
+                                    </a>
+                                <?php else: ?>
+                                    <button type="button" 
+                                            onclick="checkLoginBeforeBooking(<?php echo $room_data['id']; ?>)"  
+                                            class="btn btn-sm btn-primary shadow-none w-100">
+                                        Book Now
+                                    </button>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
-                </div>
                 <?php
-                }
+                } 
             }
         ?>
-        
         
         <div class="col-lg-12 text-end mt-5">
             <a href="rooms.php" class="btn btn-outline-dark rounded-0 fw-bold shadow-none">More Rooms >>></a>
         </div>
     </div>
 </div>
+
+
+
+
 
 <!--Our Facilities-->   
     <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">OUR FACILITIES</h2>
@@ -366,6 +382,14 @@ require('admin/inc/essentials.php');
         });
 
 
+    </script>
+<script>
+    function checkLoginBeforeBooking(roomId) {
+    if(confirm('You need to login to book this room. Redirect to login page?')) {
+        window.location.href = 'login.php?redirect=' + 
+            encodeURIComponent('confirm_booking.php?id=' + roomId);
+    }
+}
     </script>
 <?php require('inc/footer.php'); ?>
 </body>

@@ -73,6 +73,10 @@
 require('admin/inc/db_config.php');
 require('admin/inc/essentials.php');
 
+$isLoggedIn = false;
+            if(isset($_SESSION['login']) && $_SESSION['login'] == true) {
+                $isLoggedIn = true;
+            }
 
 $room_res = mysqli_query($con, "SELECT * FROM rooms WHERE status = 1");
 
@@ -167,27 +171,38 @@ while($room_data = mysqli_fetch_assoc($room_res)) {
             <!-- ÇMIMI & BUTONI -->
             <div class="col-md-2 text-center">
                 <h6 class="mb-4 text-primary">
-                    <i class="bi bi-currency-euro"></i> <?= $room_data['price'] ?> per night
+                    <i class="bi bi-currency-euro"></i> <?= number_format($room_data['price'], 2) ?> per night
                 </h6>
-                <a href="room_details.php?id=<?= $room_id ?>" class="btn btn-sm btn-primary shadow-none mb-2 w-100">
-                    <i class="bi bi-calendar-check"></i> Book Now
-                </a>
+               <?php if($isLoggedIn): ?>
+                    <a href="#.php?id=<?php echo $room_data['id']; ?>" 
+                    class="btn btn-sm btn-primary shadow-none w-100">
+                        Book Now
+                    </a>
+                <?php else: ?>
+                    <button type="button" 
+                            onclick="checkLoginBeforeBooking(<?php echo $room_data['id']; ?>)" 
+                            class="btn btn-sm btn-primary shadow-none w-100">
+                        Book Now
+                    </button>
+                <?php endif; ?>
             </div>
-        </div>
-    </div>
-    <?php
-}
+        </div> 
+    </div> 
+<?php
+    }
 ?>
-
-
-       
-    </div>
-
-
-  </div>
+</div>
+</div>
 </div>
 
-
+<script>
+    function checkLoginBeforeBooking(roomId) {
+    if(confirm('You need to login to book this room. Redirect to login page?')) {
+        window.location.href = 'login.php?redirect=' + 
+            encodeURIComponent('confirm_booking.php?id=' + roomId);
+    }
+}
+    </script>
 <?php require('inc/footer.php'); ?>
 
     
