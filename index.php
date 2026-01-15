@@ -300,7 +300,7 @@
 <script>
     function checkLoginBeforeBooking(roomId) {
     if(confirm('You need to login to book this room. Redirect to login page?')) {
-        window.location.href = 'login.php?redirect=' + 
+        window.location.href = 'login_register.php?redirect=' + 
             encodeURIComponent('confirm_booking.php?id=' + roomId);
     }
 }

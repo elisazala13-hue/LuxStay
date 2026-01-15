@@ -4,9 +4,6 @@ require_once('../admin/inc/db_config.php');
 require_once('../admin/inc/essentials.php');
 require_once __DIR__ . '/../inc/sendgrid-php/sendgrid-php.php';
 
-/**
- * Funksioni për të dërguar OTP në email
- */
 function send_otp_mail($uemail, $name, $otp)
 {
     $email = new \SendGrid\Mail\Mail();
