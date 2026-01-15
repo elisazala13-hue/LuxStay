@@ -1,4 +1,3 @@
-
 <?php
 require_once('admin/inc/db_config.php');
 require_once('admin/inc/essentials.php');
@@ -6,22 +5,12 @@ require_once('admin/inc/essentials.php');
 /*if(!isset($_SESSION['login']) || $_SESSION['login'] != true) {
     redirect('rooms.php');
 }*/
-if(!isset($_SESSION['uid'])) {
+if(!isset($_SESSION['uid'])) { //hiqe kur te fusesh loginin!!!
     $_SESSION['uid'] = 1; 
 }
 
-if(!isset($_GET['id'])) {
-    redirect('rooms.php');
-}
-
-$room_id = (int)$_GET['id'];
-$room_res = mysqli_query($con, "SELECT * FROM `rooms` WHERE `id` = $room_id AND `status` = 1");
-
-if(mysqli_num_rows($room_res) == 0) {
-    redirect('rooms.php');
-}
-
-$room_data = mysqli_fetch_assoc($room_res);
+$room_id = $_GET['id'];
+$room_data = mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM `rooms` WHERE `id` = $room_id AND `status` = 1"));
 
 $_SESSION['room'] = [
     "id" => $room_data['id'],
@@ -30,18 +19,18 @@ $_SESSION['room'] = [
     "payment" => null,
     "available" => false,
 ];
+/*if(isset($_SESSION['uid'])) {
+    $user_id = $_SESSION['uid'];
+}*/
+$user_id = $_SESSION['uid'] ?? 1; //hiqe kur te fusesh loginin!!!
+$user_res = mysqli_query($con, "SELECT * FROM `user_cred` WHERE `id` = $user_id");
 
-$user_id = $_SESSION['uid'] ?? 1;
-$user_sql = "SELECT * FROM `user_cred` WHERE `id` = $user_id LIMIT 1";
-$user_res = mysqli_query($con, $user_sql);
-
-$room_id = $room_data['id'];
 $features_data = "";
 $fea_q = mysqli_query($con, "SELECT f.name FROM features f
     INNER JOIN room_features rfea ON f.id = rfea.features_id
     WHERE rfea.room_id = $room_id");
 
-if($fea_q && mysqli_num_rows($fea_q) > 0) {
+if(mysqli_num_rows($fea_q) > 0) {
     while($fea_row = mysqli_fetch_assoc($fea_q)) {
         $features_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>{$fea_row['name']}</span>";
     }
@@ -52,18 +41,15 @@ $fac_q = mysqli_query($con, "SELECT f.name FROM facilities f
     INNER JOIN room_facilities rfac ON f.id = rfac.facilities_id
     WHERE rfac.room_id = $room_id");
 
-if($fac_q && mysqli_num_rows($fac_q) > 0) {
+if(mysqli_num_rows($fac_q) > 0) {
     while($fac_row = mysqli_fetch_assoc($fac_q)) {
         $facilities_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>{$fac_row['name']}</span>";
     }
 }
 
-
 if(!empty($room_data['images'])) {
-    $room_thumb = "images/rooms/" . $room_data['images'];
-} else {
-    $room_thumb = "images/rooms/default.jpg";
-}
+    $room_pic = "images/rooms/" . $room_data['images'];
+} 
 ?>
 
 <!DOCTYPE html>
@@ -71,7 +57,7 @@ if(!empty($room_data['images'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirm Booking - <?php echo htmlspecialchars($room_data['name']); ?></title>
+    <title>Confirm Booking - <?php echo $room_data['name']; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 </head>
@@ -95,14 +81,13 @@ if(!empty($room_data['images'])) {
     
         <div class="col-lg-7 col-md-12 px-4 mb-4">
             <div class="card border-0 shadow">
-                <img src="<?php echo $room_thumb; ?>" 
+                <img src="<?php echo $room_pic; ?>" 
                      class="card-img-top rounded" 
                      style="height: 400px; object-fit: cover;"
-                     alt="<?php echo htmlspecialchars($room_data['name']); ?>"
-                     onerror="this.src='images/rooms/default.jpg'">
+                     alt="<?php echo $room_data['name']; ?>">
                 
                 <div class="card-body">
-                    <h3 class="card-title"><?php echo htmlspecialchars($room_data['name']); ?></h3>
+                    <h3 class="card-title"><?php echo $room_data['name']; ?></h3>
                     <p class="text-muted mb-3">
                         <i class="bi bi-rulers"></i> <?php echo $room_data['area']; ?> m²
                     </p>
@@ -146,7 +131,7 @@ if(!empty($room_data['images'])) {
                         </h5>
                     </div>
                     
-                    <form id="bookingForm" action="process_booking.php" method="POST">
+                    <form id="bookingForm" method="POST">
                         <input type="hidden" name="room_id" id="roomId" value="<?php echo $room_data['id']; ?>">
                         <input type="hidden" name="room_price" value="<?php echo $room_data['price']; ?>">
                         
@@ -174,9 +159,7 @@ if(!empty($room_data['images'])) {
                             <label class="form-label">Total Price</label>
                             <div class="alert alert-info">
                                 <h4 class="mb-0" id="totalPrice">0.00€</h4>
-                                <small>Calculated based on selected dates and rooms</small>
-                            </div>
-                            <div id="availabilityAlert" class="mt-2"></div>
+                                </div>
                         </div>
                         
                         <div class="d-grid gap-2">
@@ -202,110 +185,47 @@ document.addEventListener('DOMContentLoaded', function() {
     const checkinInput = document.getElementById('checkin');
     const checkoutInput = document.getElementById('checkout');
     const roomsSelect = document.getElementById('roomsCount');
-    const totalPriceElement = document.getElementById('totalPrice');
+    const total = document.getElementById('totalPrice');
     const submitBtn = document.getElementById('submitBtn');
-    const availabilityAlert = document.getElementById('availabilityAlert');
     const roomId = document.getElementById('roomId').value;
     const bookingForm = document.getElementById('bookingForm');
 
-    function checkAvailability() {
-        const checkin = checkinInput.value;
-        const checkout = checkoutInput.value;
-        const roomsCount = roomsSelect.value;
-        
-        if(!checkin || !checkout) {
-            availabilityAlert.innerHTML = '';
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="bi bi-credit-card"></i> Select Dates';
-            return;
-        }
-        
-        availabilityAlert.innerHTML = '<div class="alert alert-warning"><i class="bi bi-hourglass-split"></i> Checking availability...</div>';
-        submitBtn.disabled = true;
-  
-        fetch('ajax/confirm_booking.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                'action': 'check_availability',
-                'room_id': roomId,
-                'checkin': checkin,
-                'checkout': checkout,
-                'rooms_count': roomsCount
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if(data.status === 'success') {
-                totalPriceElement.textContent = data.data.total_price + '€';
-                
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="bi bi-credit-card"></i> Confirm & Pay Now (€' + data.data.total_price + ')';
-                
-                availabilityAlert.innerHTML = `<div class="alert alert-success"><i class="bi bi-check-circle"></i> ${data.message} - ${data.data.available_rooms} room(s) available</div>`;
-            } else {
-                availabilityAlert.innerHTML = `<div class="alert alert-danger"><i class="bi bi-x-circle"></i> ${data.message}</div>`;
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="bi bi-exclamation-circle"></i> Not Available';
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            availabilityAlert.innerHTML = '<div class="alert alert-warning"><i class="bi bi-exclamation-triangle"></i> Could not check availability</div>';
-            const nights = calculateNights();
-            const total = pricePerNight * nights * parseInt(roomsSelect.value);
-            if(total > 0) {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="bi bi-credit-card"></i> Confirm & Pay Now (€' + total.toFixed(2) + ')';
-            }
-        });
+    function calculateNights() { 
+        const nights = (Date.parse(checkoutInput.value) - Date.parse(checkinInput.value)) / (1000 * 60 * 60 * 24); 
+        return nights; 
     }
 
-    function calculateNights() {
-        if(checkinInput.value && checkoutInput.value) {
-            const checkin = new Date(checkinInput.value);
-            const checkout = new Date(checkoutInput.value);
-            const nights = Math.ceil((checkout - checkin) / (1000 * 60 * 60 * 24));
-            return nights > 0 ? nights : 0;
+    function updateTotal() {
+        const nights = calculateNights();
+        const t = pricePerNight * nights * parseInt(roomsSelect.value);
+        if(t > 0){
+            total.textContent = total.toFixed(2) + '€';
+        } else {
+            total.textContent = '0.00€';
         }
-        return 0;
+
     }
 
     bookingForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        
         const formData = new FormData(this);
         formData.append('action', 'confirm_booking');
-        
+
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Processing...';
-        
+
         fetch('ajax/confirm_booking.php', {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
+        .then(res => res.json())
         .then(data => {
             if(data.status === 'success') {
-                availabilityAlert.innerHTML = `<div class="alert alert-success"><i class="bi bi-check-circle"></i> ${data.message}</div>`;
-
-                setTimeout(function() {
-                    window.location.href = data.redirect || 'booking_success.php';
-                }, 2000);
+                window.location.href = data.paypal_url; 
             } else {
-                availabilityAlert.innerHTML = `<div class="alert alert-danger"><i class="bi bi-x-circle"></i> ${data.message}</div>`;
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="bi bi-credit-card"></i> Confirm & Pay Now';
+                alert('Something went wrong');
             }
         })
-        .catch(error => {
-            console.error('Error:', error);
-            availabilityAlert.innerHTML = '<div class="alert alert-danger"><i class="bi bi-x-circle"></i> Network error. Please try again.</div>';
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="bi bi-credit-card"></i> Confirm & Pay Now';
-        });
     });
 
     checkinInput.addEventListener('change', function() {
@@ -313,38 +233,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const nextDay = new Date(this.value);
             nextDay.setDate(nextDay.getDate() + 1);
             checkoutInput.min = nextDay.toISOString().split('T')[0];
-            
-            if(checkoutInput.value && new Date(checkoutInput.value) < nextDay) {
-                checkoutInput.value = '';
-            }
+            if(checkoutInput.value && new Date(checkoutInput.value) < nextDay) checkoutInput.value = '';
         }
-        
-        const nights = calculateNights();
-        const total = pricePerNight * nights * parseInt(roomsSelect.value);
-        totalPriceElement.textContent = total > 0 ? total.toFixed(2) + '€' : '0.00€';
-        
-        checkAvailability();
+        updateTotal();
     });
-    
-    checkoutInput.addEventListener('change', function() {
-        const nights = calculateNights();
-        const total = pricePerNight * nights * parseInt(roomsSelect.value);
-        totalPriceElement.textContent = total > 0 ? total.toFixed(2) + '€' : '0.00€';
-        
-        checkAvailability();
-    });
-    
-    roomsSelect.addEventListener('change', function() {
-        const nights = calculateNights();
-        const total = pricePerNight * nights * parseInt(this.value);
-        totalPriceElement.textContent = total > 0 ? total.toFixed(2) + '€' : '0.00€';
-        
-        checkAvailability();
-    });
+    checkoutInput.addEventListener('change', updateTotal);
+    roomsSelect.addEventListener('change', updateTotal);
 
-    const nights = calculateNights();
-    const total = pricePerNight * nights * parseInt(roomsSelect.value);
-    totalPriceElement.textContent = total > 0 ? total.toFixed(2) + '€' : '0.00€';
+    updateTotal();
 });
 </script>
 

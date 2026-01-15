@@ -5,31 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LuxStay Hotel - HOME</title>
     <link rel="stylesheet" href="css/common.css">
-    
     <?php require('inc/links.php'); ?>
-    <style>
-        .swiper,
-        .swiper-wrapper,
-        .swiper-slide {
-            pointer-events: auto;
-        }
-
-        .swiper-slide {
-            cursor: grab;
-        }
-        .swiper-slide img {
-            width: 100%;         
-            height: 400px;        
-            object-fit: cover;     
-        }
-        </style>
 </head>
 <body>
 
-<?php 
-require('inc/header.php');
-
-?>
+<?php require('inc/header.php'); ?>
 
 <!--Picture Crousel-->
     <div class="container-fluid">

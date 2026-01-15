@@ -29,7 +29,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 <script>
-
     function alert(type, msg, position = 'body') {
     let bs_class = (type == 'success') ? 'alert-success' : 'alert-danger';
     let element = document.createElement('div');
@@ -56,11 +55,6 @@ function remAlert() {
     }
 }
 
-    function setActive()
-    {
-    //ka kod qe nuk e di ku eshte por ecimm
-    }
-
    let register_form = document.getElementById('register-form');
 
 register_form.addEventListener('submit', (e) => {
@@ -84,20 +78,18 @@ register_form.addEventListener('submit', (e) => {
 
     data.append('register', '');
 
-    // Hide modal
     const myModal = document.getElementById('registerModal');
     const modal = bootstrap.Modal.getInstance(myModal);
     if (modal) modal.hide();
 
-    // AJAX request
+   
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "ajax/login_register.php", true);
     xhr.onload = function () {
-        console.log(this.responseText); // test
+        console.log(this.responseText); 
     };
     xhr.send(data);
 });
 
-   // setActive();
 
 </script>

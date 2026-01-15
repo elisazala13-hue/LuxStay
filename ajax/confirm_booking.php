@@ -1,123 +1,78 @@
 <?php
 require_once('../inc/db_config.php');
 require_once('../inc/essentials.php');
+require_once('../config/paypal_config.php');
 
 date_default_timezone_set("Europe/Tirane");
 header('Content-Type: application/json');
+session_start();
 
-if(!isset($_POST['action'])) {
-    echo json_encode(['status' => 'error', 'message' => 'No action specified']);
+if(!isset($_POST['action'])){
+    echo json_encode(['status'=>'error']);
     exit;
 }
 
-$action = $_POST['action'];
-  
-if($action == 'check_availability') {
-    $room_id = (int)$_POST['room_id'];
-    $checkin = mysqli_real_escape_string($con, $_POST['checkin']);
-    $checkout = mysqli_real_escape_string($con, $_POST['checkout']);
-    $rooms_count = (int)$_POST['rooms_count'];
-    
-    $checkin_date = new DateTime($checkin);
-    $checkout_date = new DateTime($checkout);
-    $interval = $checkin_date->diff($checkout_date);
-    $nights = $interval->days;
+if($_POST['action'] == 'confirm_booking'){
 
-    $room_res = mysqli_query($con, "SELECT * FROM `rooms` WHERE `id` = $room_id AND `status` = 1");
-    
-    if(mysqli_num_rows($room_res) == 0) {
-        echo json_encode(['status' => 'error', 'message' => 'Room not available']);
-        exit;
-    }
-    
-    $room_data = mysqli_fetch_assoc($room_res);
-
-    $booking_query = "SELECT COALESCE(SUM(`rooms_count`), 0) as booked_rooms 
-                      FROM `booking_order` 
-                      WHERE `room_id` = $room_id 
-                      AND `booking_status` IN ('booked', 'confirmed')
-                      AND (
-                          (check_in < '$checkout' AND check_out > '$checkin') OR
-                          (check_in >= '$checkin' AND check_in < '$checkout')
-                      )";
-    
-    $booking_res = mysqli_query($con, $booking_query);        
-    $booking_data = mysqli_fetch_assoc($booking_res);
-    $booked_rooms = $booking_data['booked_rooms'] ?? 0;
-    $available_rooms = $room_data['quantity'] - $booked_rooms;
-    
-    if($available_rooms < $rooms_count) {
-        echo json_encode(['status' => 'error', 'message' => "Only $available_rooms room(s) available"]);
-        exit;
-    }
-
-    $total_price = $room_data['price'] * $nights * $rooms_count;
-    
-    echo json_encode([
-        'status' => 'success',
-        'message' => 'Room available',
-        'data' => [
-            'room_id' => $room_id,
-            'room_name' => $room_data['name'],
-            'checkin' => $checkin,
-            'checkout' => $checkout,
-            'nights' => $nights,
-            'rooms_count' => $rooms_count,
-            'price_per_night' => $room_data['price'],
-            'total_price' => number_format($total_price, 2),
-            'available_rooms' => $available_rooms
-        ]
-    ]);
-    
-} elseif($action == 'confirm_booking') {
-    session_start();
-
-    $room_id = (int)$_POST['room_id'];
-    $checkin = mysqli_real_escape_string($con, $_POST['checkin']);
-    $checkout = mysqli_real_escape_string($con, $_POST['checkout']);
-    $rooms_count = (int)$_POST['rooms_count'];
+    $room_id = $_POST['room_id'];
+    $checkin = $_POST['checkin'];
+    $checkout = $_POST['checkout'];
+    $rooms_count = $_POST['rooms_count'];
     $user_id = $_SESSION['uid'] ?? 1;
 
-    $room_res = mysqli_query($con, "SELECT price, name FROM rooms WHERE id = $room_id");
-    $room_data = mysqli_fetch_assoc($room_res);
-    $price_per_night = $room_data['price'];
+    $room = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM rooms WHERE id=$room_id"));
 
-    $checkin_date = new DateTime($checkin);
-    $checkout_date = new DateTime($checkout);
-    $interval = $checkin_date->diff($checkout_date);
-    $nights = $interval->days;
-    
-    $total_price = $price_per_night * $nights * $rooms_count;
+    $nights = (new DateTime($checkin))->diff(new DateTime($checkout))->days;
+    $total_price = $room['price'] * $nights * $rooms_count;
 
-    $order_id = 'ORD' . time() . rand(1000, 9999);
-    $query = "INSERT INTO booking_order (user_id, room_id, check_in, check_out, rooms_count, total_price, order_id, booking_status) 
-              VALUES ($user_id, $room_id, '$checkin', '$checkout', $rooms_count, $total_price, '$order_id', 'confirmed')";
-    
-    if(mysqli_query($con, $query)) {
-        $booking_id = mysqli_insert_id($con);
-        
-        $_SESSION['booking'] = [
-            'id' => $booking_id,
-            'order_id' => $order_id,
-            'room_id' => $room_id,
-            'room_name' => $room_data['name'],
-            'checkin' => $checkin,
-            'checkout' => $checkout,
-            'rooms_count' => $rooms_count,
-            'total_price' => $total_price,
-            'nights' => $nights
-        ];
-        
-        echo json_encode([
-            'status' => 'success',
-            'message' => 'Booking confirmed!',
-            'booking_id' => $booking_id,
-            'order_id' => $order_id,
-            'redirect' => 'booking_success.php'
-        ]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Booking failed']);
+    $order_id = 'ORD'.time();
+
+    mysqli_query($con,"
+        INSERT INTO booking_order
+        (user_id,room_id,check_in,check_out,rooms_count,total_price,order_id,booking_status)
+        VALUES
+        ($user_id,$room_id,'$checkin','$checkout',$rooms_count,$total_price,'$order_id','pending')
+    ");
+
+    $booking_id = mysqli_insert_id($con);
+
+    $_SESSION['booking'] = [
+        'id'=>$booking_id,
+        'total'=>$total_price
+    ];
+
+    $ch = curl_init();
+    curl_setopt_array($ch,[
+        CURLOPT_URL => PAYPAL_API_BASE.'/v2/checkout/orders',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_USERPWD => PAYPAL_CLIENT_ID.':'.PAYPAL_SECRET,
+        CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+        CURLOPT_POSTFIELDS => json_encode([
+            'intent'=>'CAPTURE',
+            'purchase_units'=>[[
+                'amount'=>[
+                    'currency_code'=>'EUR',
+                    'value'=>number_format($total_price,2,'.','')
+                ]
+            ]],
+            'application_context'=>[
+                'return_url'=>'http://localhost/LuxStay/paypal_success.php'
+            ]
+        ])
+    ]);
+
+    $res = json_decode(curl_exec($ch),true);
+
+    foreach($res['links'] as $l){
+        if($l['rel']=='approve'){
+            echo json_encode([
+                'status'=>'success',
+                'paypal_url'=>$l['href']
+            ]);
+            exit;
+        }
     }
-}
 
-?>
+    echo json_encode(['status'=>'error']);
+}

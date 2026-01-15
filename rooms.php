@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +7,7 @@
     <link rel="stylesheet" href="css/common.css">
     <?php require('inc/links.php'); ?>
 </head>
+
 <body class="bg-light">
 
 <?php require('inc/header.php'); ?>
@@ -20,8 +20,6 @@
 <div class="container">
   <div class="row">
     <!-- Filters -->
-     
-
     <div class="col-lg-3 col-md-12 mb-4">
     <h4 class="mb-3">FILTERS</h4>
       <nav class="navbar navbar-expand-lg navbar-light bg-white rounded shadow p-3">
