@@ -34,7 +34,7 @@ require __DIR__ . '/admin/inc/essentials.php';
         
           <h5>Adress</h5>
         <a href ="https://maps.app.goo.gl/nMHvYSLn5pADkxfa7" target="_blank" class="d-inline-block text-decoration-none text dark mb-2">
-           <i class="bi bi-geo-alt"></i> XYZ,BLLOK,TIRANE
+           <i class="bi bi-geo-alt"></i> XYZ,TIRANE,ALBANIA
         </a>
         <h5 class="mt-4">Call Us!</h5>
         <a href="tel: +355699817747" class="d-inline-block mb-2 text-decoration-none text-dark">

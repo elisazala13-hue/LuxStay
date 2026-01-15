@@ -1,6 +1,3 @@
-<!-- fushat e regjistrimit jane vetem: name, email, phone num, date of birth, password-->
-<!-- stilizimet: bootstrap, swiper.js-->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,17 +29,6 @@
 <?php 
 require('inc/header.php');
 
-// KRIJO DATABASE CONNECTION MANUALISHT
-$con = mysqli_connect("localhost", "root", "", "hoteli");
-
-if(!$con) {
-echo "<div class='alert alert-danger m-3'>Database connection failed: " . mysqli_connect_error() . "</div>";
-    require('admin/inc/essentials.php');
-    $no_db = true;
-} else {
-    require('admin/inc/essentials.php');
-    $no_db = false;
-}
 ?>
 
 <!--Picture Crousel-->
@@ -117,8 +103,16 @@ echo "<div class='alert alert-danger m-3'>Database connection failed: " . mysqli
 <div class="container">
     <div class="row">
         <?php
-        if(!$no_db && $con) {
-            $query = "SELECT * FROM `rooms` WHERE `status` = 1 AND `removed` = 0 ORDER BY `id` DESC LIMIT 3";
+        
+            require_once('admin/inc/db_config.php');
+            require_once('admin/inc/essentials.php');
+
+            $isLoggedIn = false;
+            if(isset($_SESSION['login']) && $_SESSION['login'] == true) {
+                $isLoggedIn = true;
+            }
+
+            $query = "SELECT * FROM `rooms` WHERE `status` = 1 ORDER BY `id` ASC LIMIT 3";
             $room_res = mysqli_query($con, $query);
             
             if(!$room_res) {
@@ -151,18 +145,13 @@ echo "<div class='alert alert-danger m-3'>Database connection failed: " . mysqli
                         }
                     }
                     
-                    if(!empty($room_data['image'])) {
-                        $room_thumb = "admin/images/rooms/" . $room_data['image'];
-                    }
-                    
-            
+                    $room_thumb = "images/rooms/" . $room_data['images'];
                     ?>
                     <div class="col-lg-4 col-md-6 mb-4">
                         <div class="card h-100 border-0 shadow">
                             <div class="p-3">
                                 <img src="<?php echo $room_thumb; ?>" class="img-fluid rounded mb-3" style="height: 200px; object-fit: cover;" 
-                                     alt="<?php echo htmlspecialchars($room_data['name']); ?>"
-                                     onerror="this.src='images/default.jpg'">
+                                     alt="<?php echo htmlspecialchars($room_data['name']); ?>">
                                 <h5 class="mb-2"><?php echo htmlspecialchars($room_data['name']); ?></h5>
                                 
                                 <?php if(!empty($features_data)): ?>
@@ -191,20 +180,25 @@ echo "<div class='alert alert-danger m-3'>Database connection failed: " . mysqli
                                 
                                 <h6 class="mb-3"><?php echo number_format($room_data['price'], 2); ?>€ per night</h6>
                                 
-                                <a href="room_details.php?id=<?php echo $room_data['id']; ?>" class="btn btn-sm btn-primary shadow-none w-100">
-                                    Book Now
-                            </a>
+                                <?php if($isLoggedIn): ?>
+                                    <a href="confirm_booking.php?id=<?php echo $room_data['id']; ?>" 
+                                    class="btn btn-sm btn-primary shadow-none w-100">
+                                        Book Now
+                                    </a>
+                                <?php else: ?>
+                                    <button type="button" 
+                                            onclick="checkLoginBeforeBooking(<?php echo $room_data['id']; ?>)"  
+                                            class="btn btn-sm btn-primary shadow-none w-100">
+                                        Book Now
+                                    </button>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
-                </div>
                 <?php
-                }
+                } 
             }
-        } else {
-            echo "<div class='col-12 text-center'><p>Rooms information currently unavailable. Please check back later.</p></div>";
-        }
         ?>
-        
         
         <div class="col-lg-12 text-end mt-5">
             <a href="rooms.php" class="btn btn-outline-dark rounded-0 fw-bold shadow-none">More Rooms >>></a>
@@ -234,68 +228,6 @@ echo "<div class='alert alert-danger m-3'>Database connection failed: " . mysqli
             </div>
         </div>
     </div>      
-
-<!--Reviews-->   
-    <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">REVIEWS</h2>
-    <div class="container mt-5">
-        <div class="swiper swiper-ratings">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide bg-white p-4">
-                    <h6>Alketa Qorri</h6>
-                    <p>Qëndrim shumë i këndshëm. Dhoma ishte 
-                        e pastër, e rregullt dhe shumë komode. 
-                        Vendndodhja perfekte për të lëvizur në qytet. 
-                        Do të kthehem përsëri. </p>
-                    <div class="rating mb-4">
-                                <h6 class="mb-1">Rating</h6>
-                                <span class="badge rounded-pill bg-light">
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                </span>
-                    </div>
-                </div>
-                <div class="swiper-slide bg-white p-4">
-                    <h6>Erald Balliu</h6>
-                    <p>Hotel i qetë dhe modern. Stafi 
-                        shumë i sjellshëm dhe gjithmonë 
-                        i gatshëm për ndihmë. Raport shumë 
-                        i mirë cilësi-çmim.</p>
-                    <div class="rating mb-4">
-                                <h6 class="mb-1">Rating</h6>
-                                <span class="badge rounded-pill bg-light">
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                </span>
-                    </div>
-                </div>
-                <div class="swiper-slide bg-white p-4">
-                    <h6>Alban Toska</h6>
-                    <p>Përvojë shumë pozitive. Ambient 
-                        i pastër, krevat i rehatshëm dhe 
-                        zonë shumë e mirë pranë kafeneve 
-                        dhe restoranteve. E rekomandoj pa 
-                        hezitim. </p>
-                    <div class="rating mb-4">
-                                <h6 class="mb-1">Rating</h6>
-                                <span class="badge rounded-pill bg-light">
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                </span>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-pagination"></div>
-        </div>
-  </div>
 
 <!--Reach Us-->   
     <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">REACH US</h2>
@@ -384,6 +316,14 @@ echo "<div class='alert alert-danger m-3'>Database connection failed: " . mysqli
         });
 
 
+    </script>
+<script>
+    function checkLoginBeforeBooking(roomId) {
+    if(confirm('You need to login to book this room. Redirect to login page?')) {
+        window.location.href = 'login.php?redirect=' + 
+            encodeURIComponent('confirm_booking.php?id=' + roomId);
+    }
+}
     </script>
 <?php require('inc/footer.php'); ?>
 </body>
