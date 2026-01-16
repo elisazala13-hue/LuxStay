@@ -3,14 +3,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
 
-    <?php
+    <?php 
+    require_once('admin/inc/db_config.php');
+    require_once('admin/inc/essentials.php');
 
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     date_default_timezone_set("Europe/Podgorica");  
-require_once('admin/inc/db_config.php');
-require_once('admin/inc/essentials.php');
 
-/*  -----  Inactivity timeout 15 minuta  ----- */
 
 if(isset($_SESSION['login']) && $_SESSION['login'] === true){
     $timeout = 15 * 60; // 15 min në sekonda

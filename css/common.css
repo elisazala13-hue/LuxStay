@@ -51,9 +51,9 @@ input[type=number] {
 
 .custom-alert{
     position: fixed;
-    top: 150px;            /* sa poshtë nga navbar – luaje siç të pëlqen */
+    top: 150px;            
     right: 20px;
-    z-index: 2000;        /* më i madh se navbar & modal backdrop */
+    z-index: 2000;        
     width: auto;
     max-width: 400px;
 }

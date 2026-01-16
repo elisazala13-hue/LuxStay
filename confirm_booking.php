@@ -2,11 +2,13 @@
 require_once('admin/inc/db_config.php');
 require_once('admin/inc/essentials.php');
 
-/*if(!isset($_SESSION['login']) || $_SESSION['login'] != true) {
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+
+if(!isset($_SESSION['login']) || $_SESSION['login'] != true) {
     redirect('rooms.php');
-}*/
-if(!isset($_SESSION['uid'])) { //hiqe kur te fusesh loginin!!!
-    $_SESSION['uid'] = 1; 
 }
 
 $room_id = $_GET['id'];
@@ -19,10 +21,10 @@ $_SESSION['room'] = [
     "payment" => null,
     "available" => false,
 ];
-/*if(isset($_SESSION['uid'])) {
-    $user_id = $_SESSION['uid'];
-}*/
-$user_id = $_SESSION['uid'] ?? 1; //hiqe kur te fusesh loginin!!!
+if(isset($_SESSION['uId'])) {
+    $user_id = $_SESSION['uId'];
+}
+
 $user_res = mysqli_query($con, "SELECT * FROM `user_cred` WHERE `id` = $user_id");
 
 $features_data = "";
@@ -187,26 +189,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const roomsSelect = document.getElementById('roomsCount');
     const total = document.getElementById('totalPrice');
     const submitBtn = document.getElementById('submitBtn');
-    const roomId = document.getElementById('roomId').value;
     const bookingForm = document.getElementById('bookingForm');
 
-    function calculateNights() { 
-        const nights = (Date.parse(checkoutInput.value) - Date.parse(checkinInput.value)) / (1000 * 60 * 60 * 24); 
-        return nights; 
+    function calculateNights() {
+        const nights = (Date.parse(checkoutInput.value) - Date.parse(checkinInput.value)) / (1000*60*60*24);
+        return nights > 0 ? nights : 0;
     }
 
     function updateTotal() {
         const nights = calculateNights();
         const t = pricePerNight * nights * parseInt(roomsSelect.value);
-        if(t > 0){
-            total.textContent = total.toFixed(2) + '€';
-        } else {
-            total.textContent = '0.00€';
-        }
-
+        total.textContent = t.toFixed(2) + '€';
     }
 
-    bookingForm.addEventListener('submit', function(e) {
+    bookingForm.addEventListener('submit', function(e){
         e.preventDefault();
         const formData = new FormData(this);
         formData.append('action', 'confirm_booking');
@@ -220,29 +216,33 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(res => res.json())
         .then(data => {
-            if(data.status === 'success') {
-                window.location.href = data.paypal_url; 
+            if(data.status === 'success'){
+                window.location.href = data.paypal_url;
             } else {
-                alert('Something went wrong');
+                alert('Something went wrong: ' + (data.msg ?? ''));
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="bi bi-credit-card"></i> Confirm & Pay Now';
             }
-        })
+        });
     });
 
-    checkinInput.addEventListener('change', function() {
-        if(this.value) {
+    checkinInput.addEventListener('change', function(){
+        if(this.value){
             const nextDay = new Date(this.value);
-            nextDay.setDate(nextDay.getDate() + 1);
+            nextDay.setDate(nextDay.getDate()+1);
             checkoutInput.min = nextDay.toISOString().split('T')[0];
             if(checkoutInput.value && new Date(checkoutInput.value) < nextDay) checkoutInput.value = '';
         }
         updateTotal();
     });
+
     checkoutInput.addEventListener('change', updateTotal);
     roomsSelect.addEventListener('change', updateTotal);
 
     updateTotal();
 });
 </script>
+
 
 <?php require('inc/footer.php'); ?>
 
