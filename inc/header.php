@@ -46,7 +46,7 @@
             <button type="button" class="btn btn-outline-dark shadow-none me-lg-2 me-3" data-bs-toggle="modal" data-bs-target="#loginModal">
             Login
             </button>
-            <button type="button" class="btn btn-outlin-dark shadow-none me-lg-2 me-3" data-bs-toggle="modal" data-bs-target="#registerModal">
+            <button type="button" class="btn btn-outline-dark shadow-none me-lg-2 me-3" data-bs-toggle="modal" data-bs-target="#registerModal">
             Register
             </button>
             data;
@@ -197,8 +197,11 @@
                              <button type="submit" class="btn btn-dark shadow-none">SEND LINK</button>
                         </div>
                     </div>
-                </form>
-            </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-dark shadow-none">REGISTER</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 

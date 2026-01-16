@@ -17,6 +17,9 @@
             padding-top: 60px; 
             overflow-y: auto;
         }
+
+   
+
         
         .btn.custom-bg {
             background-color: #0d6efd;
@@ -44,7 +47,7 @@
         }
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
+            appearance: none;
             margin: 0;
         }
         .box{
@@ -52,18 +55,19 @@
             }
 
         input[type=number] {
-            -moz-appearance: textfield;
+            appearance: textfield;
         }
 
-        .custom-bg{
-            background-color: var(--teal);
-            border: 1px solid var(--teal);
-        }
+      .custom-bg{
+    background-color: #0d6efd; /* ose ngjyra që do */
+    color: white;
+    border: none;
+}
 
-        .custom-bg:hover{
-            background-color: var(--teal_hover);
-            border-color: var(--teal_hover);
-        }
+.custom-bg:hover{
+    background-color: #0b5ed7; /* pak më e errët në hover */
+    color: white;}
+
         .h-line{
                 width: 60px;
                 height: 3px;
@@ -98,7 +102,11 @@
             height: auto;
             width: 100%;
         }
-        #main-content{
-            margin-top: 60px;
-        }
+#main-content{
+  margin-left: 220px;   /* e njëjtë me sidebar */
+  padding: 20px;
+}
+
+
+
         }
