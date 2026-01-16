@@ -39,7 +39,10 @@ input[type=number] {
 }
 
 .custom-alert{
-    position:fixed;
-    top: 25px;
-    right: 25px;
+    position: fixed;
+    top: 150px;            /* sa poshtë nga navbar – luaje siç të pëlqen */
+    right: 20px;
+    z-index: 2000;        /* më i madh se navbar & modal backdrop */
+    width: auto;
+    max-width: 400px;
 }
