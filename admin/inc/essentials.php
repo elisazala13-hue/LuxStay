@@ -7,6 +7,9 @@ define("UPLOAD_IMAGE_PATH", $_SERVER['DOCUMENT_ROOT'] . "/LuxStay/images/");
 define("ABOUT_FOLDER", "about/");
 define("USERS_FOLDER","users/");
 
+define('USERS_IMG_PATH', '../../images/users/');
+
+
 define('SENDGRID_API_KEY',"");
 
 
@@ -141,6 +144,8 @@ function uploadImageRooms($image, $folder)
         }
     }
 }
+
+
 
 
 

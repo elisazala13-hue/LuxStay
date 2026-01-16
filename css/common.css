@@ -1,6 +1,6 @@
 :root{
-    --teal: #2ec;
-    --teal_hover:#279e8c;
+    --teal: rgb(34, 238, 204);
+    --teal_hover: rgb(39, 158, 140);
 }
 
 
@@ -22,13 +22,25 @@ input[type=number] {
 }
 
 .custom-bg{
-    background-color: var(--teal);
-    border: 1px solid var(--teal);
+    background-color: var(--teal) !important;
+    border:none;
+    color: white !important;
 }
 
 .custom-bg:hover{
-    background-color: var(--teal_hover);
-    border-color: var(--teal_hover);
+    background-color: var(--teal_hover) !important;
+    color: white !important;
+}
+
+.btn.custom-bg{
+    background-color: var(--teal, #22eecc) !important;
+    border:none;
+    color: white !important;
+}
+
+.btn.custom-bg:hover{
+    background-color: var(--teal_hover, #279e8c) !important;
+    color: white !important;
 }
 
 .h-line {
