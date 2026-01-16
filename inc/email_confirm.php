@@ -2,6 +2,9 @@
 
 require_once('admin/inc/db_config.php');
 require_once('admin/inc/essentials.php');
+require('inc/links.php');
+userLogin();
+
 
 if(isset($_GET['email']) && isset($_GET['token'])) {
     $data = filteration($_GET);
