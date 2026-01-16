@@ -64,7 +64,7 @@ function send_otp_mail($uemail, $name, $otp, $type)
         "
     );
 
-    $sendgrid = new \SendGrid('');
+    $sendgrid = new \SendGrid(''); // shtoje
 
     try {
         $sendgrid->send($email);

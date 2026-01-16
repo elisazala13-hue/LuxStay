@@ -262,6 +262,70 @@ require('inc/header.php');
         </div>
     </div>
 
+
+            <!-- Password reset modal and code -->
+
+        <div class="modal fade" id="recoveryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="recovery-form">
+                        <div class="modal-header">
+                            <h5 class="modal-title d-flex align-items-center">
+                                <i class="bi bi-shield-lock fs-3 me-2"></i> Set up New Password
+                            </h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-4">
+                                <label class="form-label">New Password</label>
+                                <input type="password" name="pass" required class="form-control shadow-none">
+                                <input type="hidden" name="email">
+                                <input type="hidden" name="token">
+
+                           
+                            </div>
+
+                            <div class="mb-2 text-end">
+                                <button type="button" class="btn shadow-none me-2" data-bs-dismiss="modal">CANCEL</button>
+                                <button type="submit" class="btn btn-dark shadow-none">SUBMIT</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+            <!-- Password reset modal and code -->
+
+        <div class="modal fade" id="recoveryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="recovery-form">
+                        <div class="modal-header">
+                            <h5 class="modal-title d-flex align-items-center">
+                                <i class="bi bi-shield-lock fs-3 me-2"></i> Set up New Password
+                            </h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-4">
+                                <label class="form-label">New Password</label>
+                                <input type="password" name="pass" required class="form-control shadow-none">
+                                <input type="hidden" name="email">
+                                <input type="hidden" name="token">
+
+                           
+                            </div>
+
+                            <div class="mb-2 text-end">
+                                <button type="button" class="btn shadow-none me-2" data-bs-dismiss="modal">CANCEL</button>
+                                <button type="submit" class="btn btn-dark shadow-none">SUBMIT</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
     <script>
         var swiper = new Swiper(".swiper-container", {
@@ -314,6 +378,39 @@ require('inc/header.php');
             },
         },
         });
+      
+                    // recover account
+            let recovery_form = document.getElementById('recovery-form');
+
+            recovery_form.addEventListener('submit', (e)=>{
+                e.preventDefault();
+
+                let data = new FormData();
+
+                data.append('email',recovery_form.elements['email'].value);
+                data.append('token',recovery_form.elements['token'].value);
+                data.append('pass',recovery_form.elements['pass'].value);
+                data.append('recover_user','');
+
+                var myModal = document.getElementById('recoveryModal');
+                var modal = bootstrap.Modal.getInstance(myModal);
+                modal.hide();
+
+                let xhr = new XMLHttpRequest();
+                xhr.open("POST","ajax/login_register.php",true);
+
+                xhr.onload = function(){
+                    if(this.responseText == 'failed'){
+                        alert('error',"Account reset failed!");
+                    }
+                    else{
+                        alert('success',"Account Reset Successful !");
+                        recovery_form.reset();
+                    }
+                }
+
+                xhr.send(data);
+            });
 
 
     </script>
@@ -324,7 +421,48 @@ require('inc/header.php');
             encodeURIComponent('confirm_booking.php?id=' + roomId);
     }
 }
-    </script>
+</script>
 <?php require('inc/footer.php'); ?>
+
+<?php 
+if(isset($_GET['account_recovery']))
+{
+    $data = filteration($_GET);
+    $t_date = date("Y-m-d");
+
+    $query = select(
+        "SELECT * FROM `user_cred` WHERE `email`=? AND `token`=? AND `t_expire`=? LIMIT 1",
+        [$data['email'], $data['token'], $t_date],
+        'sss'
+    );
+
+    if(mysqli_num_rows($query) == 1)
+    {
+        ?>
+        <script>
+            // Ky script është në fund të faqes, DOM është gati → mund të ekzekutohet direkt
+            var myModal = document.getElementById('recoveryModal');
+
+            if(myModal){
+                myModal.querySelector("input[name='email']").value = '<?= $data['email'] ?>';
+                myModal.querySelector("input[name='token']").value = '<?= $data['token'] ?>';
+
+                var modal = new bootstrap.Modal(myModal);
+                modal.show();
+            }
+        </script>
+        <?php
+    }
+    else{
+        ?>
+        <script>
+            // Thirr direkt funksionin alert që e ke te footer.php
+            alert('error',"Invalid or Expired Link !");
+        </script>
+        <?php
+    }
+}
+?>
+
 </body>
 </html>

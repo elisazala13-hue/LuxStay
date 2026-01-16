@@ -6,11 +6,11 @@ define("ABOUT_IMG_PATH", SITE_URL . "images/about/");
 define("UPLOAD_IMAGE_PATH", $_SERVER['DOCUMENT_ROOT'] . "/LuxStay/images/");
 define("ABOUT_FOLDER", "about/");
 define("USERS_FOLDER","users/");
+define("USERS_IMG_PATH", SITE_URL . "images/users/");
 
-define('USERS_IMG_PATH', '../../images/users/');
-
-
-define('SENDGRID_API_KEY',"");
+define('SENDGRID_API_KEY',""); //shtoje
+define('SENDGRID_EMAIL',"luxstayhotel9@gmail.com"); //XHOI
+define('SENDGRID_NAME',"LuxStay"); //XHOI
 
 
 function adminlogin()
@@ -32,6 +32,20 @@ function redirect($url){
 function alert($type,$msg){
     $bs_class = ($type == 'success') ? "alert-success" : "alert-danger";
 
+function userLogin()
+{
+    if(!(isset($_SESSION['login']) && $_SESSION['login'] === true)){
+        header('Location: index.php'); // aty ku ke butonin Login
+        exit;
+    }
+}
+ 
+function alert($type,$msg){
+    $bs_class = ($type == 'success') ? "alert-success" : "alert-danger";
+
+function alert($type, $msg)
+{
+    $bs_class = ($type === "success") ? "alert-success" : "alert-danger";
     echo <<<alert
     <div class="alert $bs_class alert-dismissible fade show custom-alert" role="alert">
     <strong class="me-3">$msg</strong>
