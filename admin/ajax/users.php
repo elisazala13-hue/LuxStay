@@ -97,50 +97,45 @@ if (isset($_POST['search_user'])) {
     $data = "";
     $i = 1;
 
-    while($row = mysqli_fetch_assoc($res)) {
-        $del_btn = " <button onclick='remove_user($row[id])' type='button' class='btn btn-danger shadow-none btn-sm'>
-                        <i class='bi bi-trash'></i>
-                    </button>";
+while($row = mysqli_fetch_assoc($res)) {
+    $del_btn = " <button onclick='remove_user({$row['id']})' type='button' class='btn btn-danger shadow-none btn-sm'>
+                    <i class='bi bi-trash'></i>
+                </button>";
 
-
-        $verified="<span class='badge bg-warning'><i class='bi bi-x-lg'></i></span>";
-      
-        if($row['verified']){
-            $verified="<span class='badge bg-success'><i class='bi bi-check-lg'></i></span>";
-            $del_btn="";
-            }
-        $status="<button onclick='toggle_status($row[id],0)' class='btn btn-dark btn-sm shadow-none'>Active</button>";
-        if(!$row['status']){
-            $status="<button onclick='toggle_status($row[id],1)' class='btn btn-danger btn-sm shadow-none'>Inactive</button>";
-        }
-
-        $date= date("d-m-Y",strtotime($row['datentime']));
-
-
-        $data .= "
-        <tr>
-            <td>$i</td>
-            <td>
-               <img src='$path$row[profile]' width='55px'>
-               <br>
-               $row[name]
-            </td>
-            <td>$row[email]</td>
-            <td>$row[phonenum]</td>
-            <td>$row[address] |$row[pincode]</td>
-            <td>$row[dob]</td>
-            <td> $verified</td>
-            <td> $status</td>
-            <td> $date</td>
-            <td> $date</td>
-            <td> $del_btn</td>
-        </tr>    
-
-          
-        ";
-
-        $i++;
+    $verified="<span class='badge bg-warning'><i class='bi bi-x-lg'></i></span>";
+    if($row['verified']){
+        $verified="<span class='badge bg-success'><i class='bi bi-check-lg'></i></span>";
+        $del_btn="";
     }
+
+    $status="<button onclick='toggle_status({$row['id']},0)' class='btn btn-dark btn-sm shadow-none'>Active</button>";
+    if(!$row['status']){
+        $status="<button onclick='toggle_status({$row['id']},1)' class='btn btn-danger btn-sm shadow-none'>Inactive</button>";
+    }
+
+    $date= date("d-m-Y",strtotime($row['datentime']));
+
+    $data .= "
+    <tr>
+        <td>$i</td>
+        <td>
+           <img src='{$path}{$row['profile']}' width='55px'>
+           <br>
+           {$row['name']}
+        </td>
+        <td>{$row['email']}</td>
+        <td>{$row['phonenum']}</td>
+        <td>{$row['address']} | {$row['pincode']}</td>
+        <td>{$row['dob']}</td>
+        <td>$verified</td>
+        <td>$status</td>
+        <td>$date</td>
+        <td>$date</td>
+        <td>$del_btn</td>
+    </tr>";
+    $i++;
+}
+
 
     echo $data;
     exit;

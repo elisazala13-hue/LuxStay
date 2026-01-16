@@ -28,7 +28,7 @@ function send_otp_mail($uemail, $name, $otp, $type)
     $email->addTo($uemail, $name);
     $email->addContent("text/html", $body);
 
-    $sendgrid = new \SendGrid(''); 
+    $sendgrid = new \SendGrid('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'); 
 
     try {
         $sendgrid->send($email);
@@ -64,7 +64,7 @@ function send_otp_mail($uemail, $name, $otp, $type)
         "
     );
 
-    $sendgrid = new \SendGrid('');
+    $sendgrid = new \SendGrid('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');
 
     try {
         $sendgrid->send($email);
