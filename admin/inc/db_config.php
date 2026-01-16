@@ -4,10 +4,9 @@
   $uname='root';
   $pass='';
   $db='hoteli';
-  $con = mysqli_connect($hname, $uname, $pass, $db, 3306);
+  $con = mysqli_connect($hname, $uname, $pass, $db, 3307);
 
   if(!$con){
-    // Don't die, just set error for display
     $db_error = "Cannot connect to Database: " . mysqli_connect_error();
  }
  

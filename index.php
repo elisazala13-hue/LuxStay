@@ -5,35 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LuxStay Hotel - HOME</title>
     <link rel="stylesheet" href="css/common.css">
-    
     <?php require('inc/links.php'); ?>
-    <style>
-        .swiper,
-        .swiper-wrapper,
-        .swiper-slide {
-            pointer-events: auto;
-        }
-
-        .swiper-slide {
-            cursor: grab;
-        }
-        .swiper-slide img {
-            width: 100%;         
-            height: 400px;        
-            object-fit: cover;     
-        }
-        </style>
 </head>
 <body>
 
-<?php 
-require('inc/header.php');
-
-?>
+<?php require('inc/header.php'); ?>
 
 <!--Picture Crousel-->
     <div class="container-fluid">
-        <div class="swiper swiper-container">
+        <div class="swiper swiper-container" style="height: 500px;">
             <div class="swiper-wrapper">
             <div class="swiper-slide">
                 <img src="images/carousel/1.png" class="w-100 d-block" />
@@ -54,56 +34,11 @@ require('inc/header.php');
         </div>
     </div>
 
-<!--Check Availablity-->
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 bg-white shadow p-4 rounded">
-            <h5>Check Booking Availability</h5>
-            <form>
-                <div class="row">
-                    <div class="col-lg-3">
-                        <label class="form-label" style="font-weight: 500;">Check-in</label>
-                        <input type="date" class="form-control shadow-none">
-                    </div>
-                    <div class="col-lg-3">
-                        <label class="form-label" style="font-weight: 500;">Check-out</label>
-                        <input type="date" class="form-control shadow-none">
-                    </div>
-                    <div class="col-lg-3">
-                        <label class="form-label" style="font-weight: 500;">Adults</label>
-                        <select class="form-select shadow-none">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-2">
-                        <label class="form-label" style="font-weight: 500;">Children</label>
-                        <select class="form-select shadow-none">
-                              <option value="1">1</option>
-                            <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-1">
-                        <button type="submit" class="btn text-white shadow-none custom-bg">Submit</button>
-                    </div>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
 <!-- Our Rooms -->   
 <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">OUR ROOMS</h2>
 <div class="container">
     <div class="row">
         <?php
-        
             require_once('admin/inc/db_config.php');
             require_once('admin/inc/essentials.php');
 
@@ -151,8 +86,8 @@ require('inc/header.php');
                         <div class="card h-100 border-0 shadow">
                             <div class="p-3">
                                 <img src="<?php echo $room_thumb; ?>" class="img-fluid rounded mb-3" style="height: 200px; object-fit: cover;" 
-                                     alt="<?php echo htmlspecialchars($room_data['name']); ?>">
-                                <h5 class="mb-2"><?php echo htmlspecialchars($room_data['name']); ?></h5>
+                                     alt="<?php echo $room_data['name']; ?>">
+                                <h5 class="mb-2"><?php echo $room_data['name']; ?></h5>
                                 
                                 <?php if(!empty($features_data)): ?>
                                 <div class="features mb-2">
@@ -187,7 +122,7 @@ require('inc/header.php');
                                     </a>
                                 <?php else: ?>
                                     <button type="button" 
-                                            onclick="checkLoginBeforeBooking(<?php echo $room_data['id']; ?>)"  
+                                            onclick="alert('error','LOG IN!')"  
                                             class="btn btn-sm btn-primary shadow-none w-100">
                                         Book Now
                                     </button>
@@ -338,47 +273,7 @@ require('inc/header.php');
         }
         });
    
-        var swiper = new Swiper(".swiper-ratings", {
-        effect: "coverflow",
-        grabCursor: true,
-        centeredSlides: true,
-        slidesPerView: 3,
-        loop: true,
-
-        coverflowEffect: {
-            rotate: 50,
-            stretch: 0,
-            depth: 100,
-            modifier: 1,
-            slideShadows: false,
-        },
-
-        autoplay: {
-            delay: 3500,
-            disableOnInteraction: false,
-        },
-
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-        },
-
-        breakpoints: {
-            320: {
-                slidesPerView: 1,
-            },
-            640: {
-                slidesPerView: 1,
-            },
-            768: {
-                slidesPerView: 2,
-            },
-            1024: {
-                slidesPerView: 3,
-            },
-        },
-        });
-      
+        
                     // recover account
             let recovery_form = document.getElementById('recovery-form');
 
@@ -414,14 +309,7 @@ require('inc/header.php');
 
 
     </script>
-<script>
-    function checkLoginBeforeBooking(roomId) {
-    if(confirm('You need to login to book this room. Redirect to login page?')) {
-        window.location.href = 'login.php?redirect=' + 
-            encodeURIComponent('confirm_booking.php?id=' + roomId);
-    }
-}
-</script>
+
 <?php require('inc/footer.php'); ?>
 
 <?php 

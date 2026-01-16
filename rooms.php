@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +7,7 @@
     <link rel="stylesheet" href="css/common.css">
     <?php require('inc/links.php'); ?>
 </head>
+
 <body class="bg-light">
 
 <?php require('inc/header.php'); ?>
@@ -19,55 +19,6 @@
 
 <div class="container">
   <div class="row">
-    <!-- Filters -->
-     
-
-    <div class="col-lg-3 col-md-12 mb-4">
-    <h4 class="mb-3">FILTERS</h4>
-      <nav class="navbar navbar-expand-lg navbar-light bg-white rounded shadow p-3">
-        <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#filterDropdown" aria-controls="filterDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse flex-column mt-3" id="filterDropdown">
-            <div class="border bg-light p-3 rounded mb-3">
-                <h5 class="mb-3" style="font-size: 18px;">Check Availability</h5>
-                <label class="form-label">Check-in</label>
-                <input type="date" class="form-control shadow-none mb-3">
-                <label class="form-label">Check-out</label>
-                <input type="date" class="form-control shadow-none">
-            </div>
-            <div class="border bg-light p-3 rounded mb-3">
-                <h5 class="mb-3" style="font-size: 18px;">Facilities</h5>
-                <div class="form-check mb-2">
-                    <input type="checkbox" id="f1" class="form-check-input shadow-none">
-                    <label class="form-check-label" for="f1">WiFi</label>
-                </div>
-                <div class="form-check mb-2">
-                    <input type="checkbox" id="f2" class="form-check-input shadow-none">
-                    <label class="form-check-label" for="f2">Air Conditioner</label>
-                </div>
-                <div class="form-check mb-2">
-                    <input type="checkbox" id="f3" class="form-check-input shadow-none">
-                    <label class="form-check-label" for="f3">Room Heater</label>
-                </div>
-                <div class="form-check mb-2">
-                    <input type="checkbox" id="f4" class="form-check-input shadow-none">
-                    <label class="form-check-label" for="f4">Television</label>
-                </div>
-            </div>
-            <div class="border bg-light p-3 rounded">
-                <h5 class="mb-3" style="font-size: 18px;">Guests</h5>
-                <label class="form-label">Adults</label>
-                <input type="number" class="form-control shadow-none mb-3">
-                <label class="form-label">Children</label>
-                <input type="number" class="form-control shadow-none">
-            </div>
-        </div>
-      </nav>
-    </div>
-
-    <!-- Rooms List -->
-    <div class="col-lg-9 col-md-12">
         <?php
         require_once('admin/inc/db_config.php');
         require_once('admin/inc/essentials.php');
@@ -139,22 +90,15 @@
                     <?php if($isLoggedIn): ?>
                         <a href="confirm_booking.php?id=<?= $room_data['id'] ?>" class="btn btn-sm btn-primary w-100 shadow-none">Book Now</a>
                     <?php else: ?>
-                        <button type="button" onclick="checkLoginBeforeBooking(<?= $room_data['id'] ?>)" class="btn btn-sm btn-primary w-100 shadow-none">Book Now</button>
+                        <button type="button" onclick="alert('error','LOG IN!')" class="btn btn-sm btn-primary w-100 shadow-none">Book Now</button>
                     <?php endif; ?>
                 </div>
             </div>
-        </div>
         <?php } ?>
     </div>
   </div>
 </div>
 
-<script>
-function checkLoginBeforeBooking(roomId) {
-    if(confirm('You need to login to book this room. Redirect to login page?')) {
-        window.location.href = '#.php?redirect=' + encodeURIComponent('confirm_booking.php?id=' + roomId);
-    }
-}
 </script>
 
 <?php require('inc/footer.php'); ?>

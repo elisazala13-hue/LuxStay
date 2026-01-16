@@ -67,11 +67,6 @@ function remAlert() {
     }
 }
 
-    function setActive()
-    {
-    //ka kod qe nuk e di ku eshte por ecimm
-    }
-
    let register_form = document.getElementById('register-form');
 
  register_form.addEventListener('submit', (e) => {

@@ -29,31 +29,27 @@ function redirect($url){
     </script>";
     exit;
 }
-function alert($type,$msg){
-    $bs_class = ($type == 'success') ? "alert-success" : "alert-danger";
+
+function alert($type, $msg) {
+    $bs_class = ($type === "success") ? "alert-success" : "alert-danger";
+
+    echo <<<ALERT
+    <div class="alert $bs_class alert-dismissible fade show custom-alert" role="alert">
+        <strong class="me-3">$msg</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+ALERT;
+}
 
 function userLogin()
 {
     if(!(isset($_SESSION['login']) && $_SESSION['login'] === true)){
-        header('Location: index.php'); // aty ku ke butonin Login
+        header('Location: index.php'); 
         exit;
     }
 }
  
-function alert($type,$msg){
-    $bs_class = ($type == 'success') ? "alert-success" : "alert-danger";
 
-function alert($type, $msg)
-{
-    $bs_class = ($type === "success") ? "alert-success" : "alert-danger";
-    echo <<<alert
-    <div class="alert $bs_class alert-dismissible fade show custom-alert" role="alert">
-    <strong class="me-3">$msg</strong>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-alert;
-
-}
 function uploadImage($image,$folder)
 {
     $valid_mime = ['image/jpeg','image/png','image/webp'];
@@ -85,13 +81,11 @@ function uploadUserImage($image)
     }
 
     $ext = strtolower(pathinfo($image['name'], PATHINFO_EXTENSION));
-    $rname = 'IMG_' . random_int(11111, 99999) . '.' . $ext; // keep original extension
+    $rname = 'IMG_' . random_int(11111, 99999) . '.' . $ext; 
     $img_path = UPLOAD_IMAGE_PATH . USERS_FOLDER . $rname;
 
-    // Make sure GD functions exist
     if (!function_exists('imagecreatefromjpeg')) return 'gd_missing';
 
-    // Load image based on type
     switch ($ext) {
         case 'png':
             if (!function_exists('imagecreatefrompng')) return 'gd_missing';
@@ -111,9 +105,8 @@ function uploadUserImage($image)
 
     if (!$img) return 'upd_failed';
 
-    // Save as JPEG to reduce size, quality 75
     $save_result = imagejpeg($img, $img_path, 75);
-    imagedestroy($img); // free memory
+    imagedestroy($img); 
 
     return $save_result ? $rname : 'upd_failed';
 }
