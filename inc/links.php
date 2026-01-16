@@ -4,9 +4,32 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
 
     <?php
+
+    session_start();
+    date_default_timezone_set("Europe/Podgorica");  
 require_once('admin/inc/db_config.php');
 require_once('admin/inc/essentials.php');
 
+/*  -----  Inactivity timeout 15 minuta  ----- */
+
+if(isset($_SESSION['login']) && $_SESSION['login'] === true){
+    $timeout = 15 * 60; // 15 min në sekonda
+
+    if(isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $timeout){
+        // skado sessionin
+        session_unset();
+        session_destroy();
+        // mund të pastrosh dhe cookie nëse do
+        setcookie('remember_token', '', time() - 3600, '/');
+        header('Location: index.php'); // faqja e login-it / home
+        exit;
+    }
+
+    $_SESSION['last_activity'] = time();
+}
+else{
+    // nëse nuk është loguar, nuk bëjmë gjë këtu
+} 
 //$contact_q  = "SELECT * FROM `contact_details` WHERE `sr_no` = ?";
  //$settings_q = "SELECT * FROM 'settings' WHERE 'sr_no' = ?";
 

@@ -3,12 +3,25 @@
 require_once('../admin/inc/db_config.php');
 require_once('../admin/inc/essentials.php');
 require_once __DIR__ . '/../inc/sendgrid-php/sendgrid-php.php';
+date_default_timezone_set("Europe/Podgorica"); 
 
-/**
- * Funksioni për të dërguar OTP në email
- */
-function send_otp_mail($uemail, $name, $otp)
+function send_otp_mail($uemail, $name, $otp, $type)
 {
+    if($type == "email_confirmation"){
+        $subject = "Your LuxStay Email Verification Code";
+        $body = "
+            <p>Hi {$name},</p>
+            <p>Your verification code is:</p>
+            <h2>{$otp}</h2>
+            <p>Please enter this code in the verification form on the website to activate your account.</p>
+        ";
+    }
+    else{
+        // nqs do ta përdorësh për raste të tjera më vonë
+        $subject = "LuxStay Notification";
+        $body = "<p>Your code is: <strong>{$otp}</strong></p>";
+    }
+
     $email = new \SendGrid\Mail\Mail();
     $email->setFrom(SENDGRID_EMAIL, SENDGRID_NAME);
     $email->setSubject($subject);
@@ -51,7 +64,7 @@ function send_otp_mail($uemail, $name, $otp)
         "
     );
 
-    $sendgrid = new \SendGrid('');
+    $sendgrid = new \SendGrid(''); // shtoje
 
     try {
         $sendgrid->send($email);
