@@ -7,7 +7,6 @@
   $con = mysqli_connect($hname, $uname, $pass, $db, 3306);
 
   if(!$con){
-    // Don't die, just set error for display
     $db_error = "Cannot connect to Database: " . mysqli_connect_error();
  }
  

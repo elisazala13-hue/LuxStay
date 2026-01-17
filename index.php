@@ -5,35 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LuxStay Hotel - HOME</title>
     <link rel="stylesheet" href="css/common.css">
-    
     <?php require('inc/links.php'); ?>
-    <style>
-        .swiper,
-        .swiper-wrapper,
-        .swiper-slide {
-            pointer-events: auto;
-        }
-
-        .swiper-slide {
-            cursor: grab;
-        }
-        .swiper-slide img {
-            width: 100%;         
-            height: 400px;        
-            object-fit: cover;     
-        }
-        </style>
 </head>
 <body>
 
-<?php 
-require('inc/header.php');
-
-?>
+<?php require('inc/header.php'); ?>
 
 <!--Picture Crousel-->
     <div class="container-fluid">
-        <div class="swiper swiper-container">
+        <div class="swiper swiper-container" style="height: 500px;">
             <div class="swiper-wrapper">
             <div class="swiper-slide">
                 <img src="images/carousel/1.png" class="w-100 d-block" />
@@ -54,56 +34,11 @@ require('inc/header.php');
         </div>
     </div>
 
-<!--Check Availablity-->
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 bg-white shadow p-4 rounded">
-            <h5>Check Booking Availability</h5>
-            <form>
-                <div class="row">
-                    <div class="col-lg-3">
-                        <label class="form-label" style="font-weight: 500;">Check-in</label>
-                        <input type="date" class="form-control shadow-none">
-                    </div>
-                    <div class="col-lg-3">
-                        <label class="form-label" style="font-weight: 500;">Check-out</label>
-                        <input type="date" class="form-control shadow-none">
-                    </div>
-                    <div class="col-lg-3">
-                        <label class="form-label" style="font-weight: 500;">Adults</label>
-                        <select class="form-select shadow-none">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-2">
-                        <label class="form-label" style="font-weight: 500;">Children</label>
-                        <select class="form-select shadow-none">
-                              <option value="1">1</option>
-                            <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-1">
-                        <button type="submit" class="btn text-white shadow-none custom-bg">Submit</button>
-                    </div>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
 <!-- Our Rooms -->   
 <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">OUR ROOMS</h2>
 <div class="container">
     <div class="row">
         <?php
-        
             require_once('admin/inc/db_config.php');
             require_once('admin/inc/essentials.php');
 
@@ -151,8 +86,8 @@ require('inc/header.php');
                         <div class="card h-100 border-0 shadow">
                             <div class="p-3">
                                 <img src="<?php echo $room_thumb; ?>" class="img-fluid rounded mb-3" style="height: 200px; object-fit: cover;" 
-                                     alt="<?php echo htmlspecialchars($room_data['name']); ?>">
-                                <h5 class="mb-2"><?php echo htmlspecialchars($room_data['name']); ?></h5>
+                                     alt="<?php echo $room_data['name']; ?>">
+                                <h5 class="mb-2"><?php echo $room_data['name']; ?></h5>
                                 
                                 <?php if(!empty($features_data)): ?>
                                 <div class="features mb-2">
@@ -187,7 +122,7 @@ require('inc/header.php');
                                     </a>
                                 <?php else: ?>
                                     <button type="button" 
-                                            onclick="checkLoginBeforeBooking(<?php echo $room_data['id']; ?>)"  
+                                            onclick="alert('error','LOG IN!')"  
                                             class="btn btn-sm btn-primary shadow-none w-100">
                                         Book Now
                                     </button>
@@ -262,6 +197,70 @@ require('inc/header.php');
         </div>
     </div>
 
+
+            <!-- Password reset modal and code -->
+
+        <div class="modal fade" id="recoveryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="recovery-form">
+                        <div class="modal-header">
+                            <h5 class="modal-title d-flex align-items-center">
+                                <i class="bi bi-shield-lock fs-3 me-2"></i> Set up New Password
+                            </h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-4">
+                                <label class="form-label">New Password</label>
+                                <input type="password" name="pass" required class="form-control shadow-none">
+                                <input type="hidden" name="email">
+                                <input type="hidden" name="token">
+
+                           
+                            </div>
+
+                            <div class="mb-2 text-end">
+                                <button type="button" class="btn shadow-none me-2" data-bs-dismiss="modal">CANCEL</button>
+                                <button type="submit" class="btn btn-dark shadow-none">SUBMIT</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+            <!-- Password reset modal and code -->
+
+        <div class="modal fade" id="recoveryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="recovery-form">
+                        <div class="modal-header">
+                            <h5 class="modal-title d-flex align-items-center">
+                                <i class="bi bi-shield-lock fs-3 me-2"></i> Set up New Password
+                            </h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-4">
+                                <label class="form-label">New Password</label>
+                                <input type="password" name="pass" required class="form-control shadow-none">
+                                <input type="hidden" name="email">
+                                <input type="hidden" name="token">
+
+                           
+                            </div>
+
+                            <div class="mb-2 text-end">
+                                <button type="button" class="btn shadow-none me-2" data-bs-dismiss="modal">CANCEL</button>
+                                <button type="submit" class="btn btn-dark shadow-none">SUBMIT</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
     <script>
         var swiper = new Swiper(".swiper-container", {
@@ -274,57 +273,84 @@ require('inc/header.php');
         }
         });
    
-        var swiper = new Swiper(".swiper-ratings", {
-        effect: "coverflow",
-        grabCursor: true,
-        centeredSlides: true,
-        slidesPerView: 3,
-        loop: true,
+        
+                    // recover account
+            let recovery_form = document.getElementById('recovery-form');
 
-        coverflowEffect: {
-            rotate: 50,
-            stretch: 0,
-            depth: 100,
-            modifier: 1,
-            slideShadows: false,
-        },
+            recovery_form.addEventListener('submit', (e)=>{
+                e.preventDefault();
 
-        autoplay: {
-            delay: 3500,
-            disableOnInteraction: false,
-        },
+                let data = new FormData();
 
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-        },
+                data.append('email',recovery_form.elements['email'].value);
+                data.append('token',recovery_form.elements['token'].value);
+                data.append('pass',recovery_form.elements['pass'].value);
+                data.append('recover_user','');
 
-        breakpoints: {
-            320: {
-                slidesPerView: 1,
-            },
-            640: {
-                slidesPerView: 1,
-            },
-            768: {
-                slidesPerView: 2,
-            },
-            1024: {
-                slidesPerView: 3,
-            },
-        },
-        });
+                var myModal = document.getElementById('recoveryModal');
+                var modal = bootstrap.Modal.getInstance(myModal);
+                modal.hide();
+
+                let xhr = new XMLHttpRequest();
+                xhr.open("POST","ajax/login_register.php",true);
+
+                xhr.onload = function(){
+                    if(this.responseText == 'failed'){
+                        alert('error',"Account reset failed!");
+                    }
+                    else{
+                        alert('success',"Account Reset Successful !");
+                        recovery_form.reset();
+                    }
+                }
+
+                xhr.send(data);
+            });
 
 
     </script>
-<script>
-    function checkLoginBeforeBooking(roomId) {
-    if(confirm('You need to login to book this room. Redirect to login page?')) {
-        window.location.href = 'login.php?redirect=' + 
-            encodeURIComponent('confirm_booking.php?id=' + roomId);
+
+<?php require('inc/footer.php'); ?>
+
+<?php 
+if(isset($_GET['account_recovery']))
+{
+    $data = filteration($_GET);
+    $t_date = date("Y-m-d");
+
+    $query = select(
+        "SELECT * FROM `user_cred` WHERE `email`=? AND `token`=? AND `t_expire`=? LIMIT 1",
+        [$data['email'], $data['token'], $t_date],
+        'sss'
+    );
+
+    if(mysqli_num_rows($query) == 1)
+    {
+        ?>
+        <script>
+            // Ky script është në fund të faqes, DOM është gati → mund të ekzekutohet direkt
+            var myModal = document.getElementById('recoveryModal');
+
+            if(myModal){
+                myModal.querySelector("input[name='email']").value = '<?= $data['email'] ?>';
+                myModal.querySelector("input[name='token']").value = '<?= $data['token'] ?>';
+
+                var modal = new bootstrap.Modal(myModal);
+                modal.show();
+            }
+        </script>
+        <?php
+    }
+    else{
+        ?>
+        <script>
+            // Thirr direkt funksionin alert që e ke te footer.php
+            alert('error',"Invalid or Expired Link !");
+        </script>
+        <?php
     }
 }
-    </script>
-<?php require('inc/footer.php'); ?>
+?>
+
 </body>
 </html>

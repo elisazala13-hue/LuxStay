@@ -1,8 +1,9 @@
 <?php 
-  require_once $_SERVER['DOCUMENT_ROOT'] . '/LuxStay/admin/inc/db_config.php';
+require_once('admin/inc/db_config.php');
+require_once('admin/inc/essentials.php');
 
-  require_once('inc/essentials.php');
-  session_start();
-  session_destroy();
-  redirect('index.php');
-?>
+session_start();
+session_unset();   // fshin variablat
+session_destroy(); // mbyll sessionin
+
+redirect('index.php');
