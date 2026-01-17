@@ -28,7 +28,8 @@ function send_otp_mail($uemail, $name, $otp, $type)
     $email->addTo($uemail, $name);
     $email->addContent("text/html", $body);
 
-    $sendgrid = new \SendGrid(); 
+    $sendgrid = new \SendGrid(SENDGRID_API_KEY);
+
 
     try {
         $sendgrid->send($email);
@@ -64,7 +65,8 @@ function send_otp_mail($uemail, $name, $otp, $type)
         "
     );
 
-    $sendgrid = new \SendGrid();
+    $sendgrid = new \SendGrid(SENDGRID_API_KEY);
+
 
     try {
         $sendgrid->send($email);
