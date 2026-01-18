@@ -65,8 +65,7 @@ function send_otp_mail($uemail, $name, $otp, $type)
         "
     );
 
-    $sendgrid = new \SendGrid(SENDGRID_API_KEY);
-
+    $sendgrid = new \SendGrid(''); // shtoje
 
     try {
         $sendgrid->send($email);
@@ -161,7 +160,7 @@ if (isset($_POST['login']))
     }
    else{
     $u_fetch = mysqli_fetch_assoc($u_exist);
-    if($u_fetch['is_verified']==0){
+    if($u_fetch['verified']==0){
         echo 'not_verified';
     }
     else if($u_fetch['status']==0){
@@ -198,7 +197,7 @@ if(isset($_POST['forgot_pass']))
     else
     {
         $u_fetch = mysqli_fetch_assoc($u_exist);
-        if($u_fetch['is_verified']==0){
+        if($u_fetch['verified']==0){
             echo 'not_verified';
         }
         else if($u_fetch['status']==0){
@@ -267,7 +266,7 @@ if(isset($_POST['verify_otp']))
 
     $u_fetch = mysqli_fetch_assoc($u_exist);
 
-    if($u_fetch['is_verified'] == 1){
+    if($u_fetch['verified'] == 1){
         echo 'already_verified';
         exit;
     }
@@ -280,7 +279,7 @@ if(isset($_POST['verify_otp']))
 
     // nëse kodi është i saktë → verifiko userin
     $query = "UPDATE `user_cred` 
-              SET `is_verified` = 1, `otp_code` = NULL 
+              SET `verified` = 1, `otp_code` = NULL 
               WHERE `email` = ?";
 
     if(update($query, [$data['email']], 's')){
